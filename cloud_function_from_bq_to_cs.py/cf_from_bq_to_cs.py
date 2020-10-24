@@ -1,3 +1,5 @@
+# original source => https://stackoverflow.com/questions/59687796/how-to-schedule-an-export-from-a-bigquery-table-to-cloud-storage
+
 # Imports the BigQuery client library
 import os
 from google.cloud import bigquery
