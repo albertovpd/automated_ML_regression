@@ -9,6 +9,7 @@ __pycache__/
 # folders
 input/
 study/
+.env 
 
 # Distribution / packaging
 .Python
