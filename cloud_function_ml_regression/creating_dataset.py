@@ -4,19 +4,13 @@ from my_functions import creating_dataset
 from datetime import datetime, date
 
 
-
-#df_google = pd.read_csv(os.getenv("df_google"))
 df_google = pd.read_csv("../tmp/data_pytrends.csv")
-print("pytrends loaded")
+print("google dataset loaded")
 
 df_economical=pd.read_csv("../tmp/dashboard_spanish_news_economical.csv.gz")
 df_political=pd.read_csv("../tmp/dashboard_spanish_news_political.csv.gz")
 df_social=pd.read_csv("../tmp/dashboard_spanish_news_social.csv.gz")
-
-# df_economical=pd.read_csv(os.getenv("df_economical"))
-# df_political=pd.read_csv(os.getenv("df_political"))
-# df_social=pd.read_csv(os.getenv("df_social"))
-print("news loaded")
+print("gdelt datasets loaded")
 
 df_google.drop(columns='Unnamed: 0', inplace=True)
 
@@ -58,5 +52,5 @@ df_final=df_final.fillna(0)
 df_final.to_csv("../tmp/dataset_final.csv")
 
 
-print("creating dataset done")
+print("raw dataset created")
 

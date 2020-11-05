@@ -1,8 +1,10 @@
 import pandas as pd
 import numpy as np
 from sklearn.feature_selection import RFECV
-from sklearn.linear_model import LinearRegression
+#from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import Lasso
+
+# There's room for improvement in this script, and I love it. Stuff for myself from the future.
 
 df=pd.read_csv("../tmp/dataset_final_processed.csv")
 df.drop(columns='Unnamed: 0', inplace=True)
@@ -35,11 +37,11 @@ result["real_searches"]=df["unemployment"]
 result["infered_results"]=pd.DataFrame(rfecv.predict(X))
 
 result["infered_results"]=result["infered_results"].apply(lambda x: 0 if x<0 else round(x,2))
-result.to_csv("..tmp/results.csv")
+result.to_csv("../tmp/results.csv")
 
 # weekly score
 score = pd.DataFrame({"date": [max(df["date"])], 'RMSE': [round(rfecv.score(X_train, target_train),4)]})
-score.to_csv("input/weekly_score.csv")
+score.to_csv("../tmp/weekly_score.csv")
 
 # Ranking of how important are the following keywords to infer in Google searches in Spain
 # the keyword "unemployment"

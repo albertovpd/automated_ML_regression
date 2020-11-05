@@ -1,3 +1,7 @@
+import datetime
+import numpy as np
+# Not defining datetime here will end in an error
+
 def main (data,context):
     
     processes= [
@@ -8,8 +12,8 @@ def main (data,context):
         ] 
 
     for p in processes:
-        print(p)
         exec(open(p).read())
+        print("=>",p, "done")
 
 if __name__ == "__main__":
   

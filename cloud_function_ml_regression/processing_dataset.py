@@ -1,6 +1,5 @@
 import pandas as pd
-from datetime import timedelta
-
+import datetime
 
 dataset=pd.read_csv("../tmp/dataset_final.csv")
 
@@ -12,8 +11,7 @@ dataset.rename(columns={'desempleo_y':"unemployment"}, inplace=True)
 dataset["date"]=pd.to_datetime(dataset["date"])
 df_unemployment=pd.DataFrame(dataset[["date", "unemployment"]])
 dataset.drop(columns="unemployment", inplace=True)
-
-dataset["date"]=dataset["date"].apply(lambda x: x+timedelta(weeks=4))
+dataset["date"]=dataset["date"].apply(lambda x: x + datetime.timedelta(weeks=4))
 
 # now let's merge again
 df=pd.merge(dataset,df_unemployment,how='outer', on=["date"],suffixes=(None,None))
@@ -25,3 +23,5 @@ df.reset_index(drop=True,inplace=True)
 df.drop([0,1,2,3], inplace=True)
 
 df.to_csv("../tmp/dataset_final_processed.csv")
+
+print("dataset processed")
