@@ -7,12 +7,13 @@ I have at hand an automated ETL ingesting data periodically, it measures many ke
 
 After processed, the different sources will be merged into a single dataset, with every keyword in a column with values for each week. 
 
-- Will I be able to foresee the value of a column 2 weeks in advance? I think so, but the result is not going to be great, because everything will be triggered from several *Cloud Functions*, which have 60 seconds of working time as maximum, and 4GB of RAM for loading and processing.
+With that, I'll modify the dataset as I need, to infer some of the columns with 4 weeks in advance. In the jupyter notebooks shown here, I explained as detailed as I could the procedure.
 
-- Then, if you are already aware of the not-great performance, why are you doing it? Because, working with Cloud Functions is really cheap, a compulsory point for leisure project. Moreover, I believe is the cheapest way of automating a process in Google Cloud. It is worth playing with it, and if in the end the result is not suitable in any way, I will have learnt:
-    - How to work with Cloud Functions for many purposes: Loading from BQ, Loading from many regions.
-    - Feature engineering necessary to minimize RAM impact
-    - Tunning and understanding the ML regression to minimize RAM impact 
+I'm having results already and they are surprising. It works: The result is not good at the moment, nevertheless it is way better than expected.
+
+Now I need to refactorize code as much as I can to insert the regression within a Cloud Function with 4GB of RAM and 60 seconds of timeout. If it works, I'm happy regardless the performance.
+Myself from the future will improve the script, and get better metrics through model selection, tunning of hyperparameters, etc, etc. Right now the priority is make my baby work in my automated pipeline. Enhancement is secondary at the moment.
+
 
 Of course, the goal is automate and implement this to the pipeline, in order to display in a final dashboard everything + the ML part.
 
@@ -39,9 +40,6 @@ Of course, the goal is automate and implement this to the pipeline, in order to 
 
 # The Data Engineering behind.
 
-<details>
-  <summary>Click to expand</summary>
-  
 ### Load from BigQuery to Cloud Storage
 <details>
   <summary>Click to expand</summary>
@@ -72,12 +70,32 @@ Extras, configuration:
 
 </details>
 
+-------------------------------------
+
+<details>
+  <summary>Click to expand</summary>
+
+## Schedulers
+<details>
+  <summary>Under construction</summary>
+
+- Cloud function loading Gdelt data from BigQuery to Cloud Storage EEUU: 0 1 * * 2 (every Tuesday at 1:00). 
+
+</details>
+
+----------------------------------
+
+
+
 ------------------------------------
 
 ### Create the ML Cloud Function:
 
 <details>
   <summary>Under construction</summary>
+
+  - Don't forget to use your service account, the same than the feeding project => URL
+  - It is possible to read from different buckets with the same Cloud Function, yeah.
     - Ingest several csv from several *REGIONS*
     - In case it is not possible, I have 2 regions, *EUROPE, USA*. The automation of coping the data of one region to another is necessary. I would like to avoid cron jobs and the Cloud terminal if possible.
 
