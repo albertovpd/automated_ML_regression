@@ -6,7 +6,8 @@ from datetime import datetime, date
 from dotenv import load_dotenv
 load_dotenv()
 
-# in .env, save the path without "", like: df_google = ./folder/whatever
+# working remote => in .env, save the path without "", like:    df_google   =   ./folder/whatever
+# working on the cloud => the key of your token is the bucket:  df_google   =   gs://<yourbucket>/<yourcsv>)
 df_google= pd.read_csv(os.getenv("df_google"))
 print("google dataset loaded")
 
