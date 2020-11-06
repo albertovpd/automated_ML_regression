@@ -4,8 +4,6 @@ from sklearn.feature_selection import RFECV
 from sklearn.linear_model import LinearRegression
 #from sklearn.linear_model import Lasso
 
-# There's room for improvement in this script, and I love it. Stuff for myself from the future.
-
 df=pd.read_csv("../tmp/dataset_final_processed.csv")
 df.drop(columns='Unnamed: 0', inplace=True)
 
@@ -37,6 +35,8 @@ regression = LinearRegression() # oher model
 rfecv = RFECV(estimator=regression, step=1, min_features_to_select=15, cv=5,scoring='neg_mean_squared_error')
 rfecv.fit(X_train, target_train)
 
+print("training done")
+
 #####################
 #       RESULTS     #
 #####################
@@ -48,6 +48,8 @@ result["infered_results"]=pd.DataFrame(rfecv.predict(X))
 
 result["infered_results"]=result["infered_results"].apply(lambda x: 0 if x<0 else round(x,2))
 result.to_csv("../tmp/results-inferences-overwrite.csv")
+
+print("csv of inferences to tmp folder done")
 
 # weekly score
 score = pd.DataFrame({"date": [max(df["date"])], 'RMSE': [round(rfecv.score(X_train, target_train),4)]})
@@ -61,3 +63,5 @@ features["top_important"]=rfecv.ranking_
 features.sort_values(by=["top_important"], inplace=True)
 features.reset_index(drop=True, inplace=True)
 features.to_csv("../tmp/results-ranking_of_features-overwrite.csv")
+
+print("csv of scores and evolution of features to tmp folder done")
