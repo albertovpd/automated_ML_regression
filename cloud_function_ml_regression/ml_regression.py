@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
 from sklearn.feature_selection import RFECV
-#from sklearn.linear_model import LinearRegression
-from sklearn.linear_model import Lasso
+from sklearn.linear_model import LinearRegression
+#from sklearn.linear_model import Lasso
 
 # There's room for improvement in this script, and I love it. Stuff for myself from the future.
 
@@ -23,8 +23,8 @@ X_test=X.iloc[-4:]
 target_test=target.iloc[-4:]
 
 # alpha=1 is like a regular regression. for getter performance use elastic net instead (l1&l2 mix).
-regression = Lasso(alpha=0.1)
-#regression = LinearRegression() # oher model
+#regression = Lasso(alpha=0.1)
+regression = LinearRegression() # oher model
 
 # neg mean squared error. it always is negative but what you get is the positive representation
 rfecv = RFECV(estimator=regression, step=1, min_features_to_select=15, cv=5,scoring='neg_mean_squared_error')
