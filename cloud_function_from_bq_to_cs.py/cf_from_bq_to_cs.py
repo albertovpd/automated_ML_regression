@@ -7,10 +7,9 @@ from google.cloud import bigquery
 
 
 def bigquery_request(self, request):
-     # I prefer importing os and using env variables but the configuration of the CF is neglecting them, I don't know why, need to check it out
-     project_name = "<project name>" 
-     bucket_name = "<storage bucket name withoug gs://>" 
-     dataset_name = "dataset in bigquery" 
+     project_name= os.environ.get('project_names')
+     bucket_name = os.environ.get('bucket_names') #storage location without gs://
+     dataset_name = os.environ.get('dataset_names')
      table_names = ["mytable_spanish_news_economical","mytable__spanish_news_political","mytable__spanish_news_social"] 
      
      for t in table_names:
