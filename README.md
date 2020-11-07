@@ -1,51 +1,61 @@
-# Automated ML within a Cloud Function.
-
-![alt](output/under_catstruction.jpeg "gatito de la costrucción reza por mí")
-Yeah, in development.
-
-- **Dashboard** => https://datastudio.google.com/s/iGEf2faYhUE
-
-I have at hand an automated ETL ingesting data periodically, it measures many keywords allocated in different BigQuery tables, from different datasets in different regions (*Google Cloud Data Engineer fun here. If you know this pain, pray for me*).  
-
-After processed, the different sources will be merged into a single dataset, with every keyword in a column with values for each week. 
-
-With that, I'll modify the dataset as I need, to infer some of the columns with 4 weeks in advance. In the jupyter notebooks shown here, I explained as detailed as I could the procedure.
-
-I'm having results already and they are surprising. It works: The result is not good at the moment, nevertheless it is way better than expected.
-
-Now I need to refactorize code as much as I can to insert the regression within a Cloud Function with 4GB of RAM and 60 seconds of timeout. If it works, I'm happy regardless the performance.
-Myself from the future will improve the script, and get better metrics through model selection, tunning of hyperparameters, etc, etc. Right now the priority is make my baby work in my automated pipeline. Enhancement is secondary at the moment.
 
 
-Of course, the goal is automate and implement this to the pipeline, in order to display in a final dashboard everything + the ML part.
+## Automated ML regression within a Cloud Function to infer unemployment searches on Google, in Spain:
 
-# What data I am using
+----------------------------
+----------------------------
 
+![alt](output/automated_ml_regression.gif)
+
+### **Dashboard** => https://datastudio.google.com/s/iGEf2faYhUE
+
+-------------------------------------
+-------------------------------------
+
+# Introduction.
 
 <details>
   <summary>Click to expand</summary>
-
-  A **Python** Cloud Function is requesting weekly from an API. The data is processed and loaded finally to several BigQuery tables for display in Data Studio. The Cloud Function, Cloud Storage bucket, Transfer and BigQuery dataset is in *EU region*. 
-
-  There is a request from the *Gdelt* Project through BigQuery with **SQL**. Google has the *Gdelt thing* allocated in USA servers, so the retrieved information is stored in a dataset located in *USA*. The dataset has many tables, and they are also displayed in Data Studio.
-
-  You can find everything in detail here:
-
-  - Dashboard => https://datastudio.google.com/s/iFQxr4r9ocs
-  - Repository => https://github.com/albertovpd/automated_etl_google_cloud-social_dashboard
   
+
+Taking advantage of this project ( **https://github.com/albertovpd/automated_etl_google_cloud-social_dashboard** ), I am using the gathered data to feed a ML model with which inferring unemployment searches on Google, in Spain.
+
+This project consists on:
+
++ Cloud Function A: Loads data from BigQuery tables to Cloud Storage, both in EEUU region. This tables contain requested and filtered info from the Gdelt Project, to analyse online news media in Spain (news section in the automated ETL link).
+
+- Cloud Function B: 
+  - Reads the data of Cloud Function A, and other data from a bucket in EU. This bucket contains requested info from Google Trends in Spain (Google searches section in the automated ETL link).
+  - Merges datasets with different length and dates.
+  - Processes them and creates a column and score for each keyword.
+  - Normalizes the final dataset.
+  - Associate date with index, but dates are not in the game, so a time series problem was turned into a linear regression one. Check it out the full script explanation here.
+  - Performs a Recursive Feature Elimination to select the best 20 features of 130 I have to play with.
+  - Apply a linear regression to infer my keyword, in this case, unemployment. 
+  - Loads the results in a Cloud Storage bucket.
+
++ Both Cloud Functions are triggered by Pub/Sub and Scheduler. Scripts can be found here.
+
++ Weekly loaded to BigQuery tables with Transfer. Some results appended to the existing tables and some overwritten. 
+
++ Plot the BigQuery tables.
 
 </details>
 
----------------------------------------------
+------------------------------------
+
+
 
 
 # The Data Engineering behind.
 
-
-### Schedulers
 <details>
   <summary>Click to expand</summary>
+
+The processes involved are shown in *Introduction*.
+
+### Schedulers
+
 
 The ETL with which I'm feeding my project is weekly updated on Mondays. I have no rush so I'll run pipelines on Tuesdays.
 
@@ -57,32 +67,21 @@ The ETL with which I'm feeding my project is weekly updated on Mondays. I have n
 - Transfer ml_regression-weekly_score => Every Tue at 04:30:00 Europe/Paris => Field delimiter: ,  => Header rows: 1
 
 
-</details>
-
-
-------------------------------------
-
 ### Creating tables in BigQuery
-<details>
-  <summary>Click to expand</summary>
 
-Now that my Cloud Function delivered the results to Cloud Storage, first time I need to load the data into a new dataset (based in EEUU, as my bucket).
+Now that my Cloud Function delivered the results to Cloud Storage, I need to load the data into a new dataset in BigQuery (based in EEUU, as my bucket).
 
 - Create tables for every csv delivered in CS
 - Advanced => Header rows to skip:1, comma separated
 
-Once done configure transfer for weekly automated updates to this tables. Beware of timing, you need to wait more or less 1 hour from loading to Storage, if don't, Transfer won't detect new files.
+### Configure Transfers
 
-</details>
-
-------------------------------------
-
+Once the tables are created is necessary to configure Transfer for weekly automated updates of the tables. Beware of timing, you need to wait more or less 1 hour from loading to Storage, if don't, Transfer won't detect new files.
 
 ### Load from BigQuery to Cloud Storage
-<details>
-  <summary>Click to expand</summary>
 
-In *cloud_function_from_bq_to_storage.py* you will find the script, and the stackoverflow source where I found it.
+
+In **cloud_function_from_bq_to_storage.py** you will find the script, and the *stack overflow* source where I found it.
 
 Extras, configuration:
 
@@ -104,86 +103,54 @@ Extras, configuration:
         dataset_name = os.getenv("YOUR_DATASET") 
         table_name = os.getenv("YOUR_TABLE") 
 
-    - I included *os* in *requirements.txt*, but I it is not necessary.
 
 </details>
 
--------------------------------------
+---------------
+
+# ML explanation. 
 
 <details>
   <summary>Click to expand</summary>
 
-## Schedulers
-<details>
-  <summary>Under construction</summary>
+Here **https://github.com/albertovpd/automated_ML_regression/tree/master/cloud_function_ml_regression** you will find the Cloud Function script.
 
-- Cloud function loading Gdelt data from BigQuery to Cloud Storage EEUU: 0 1 * * 2 (every Tuesday at 1:00). 
 
-</details>
-
-----------------------------------
+The processing part of the ML Cloud Function is explained in this jupyter in detail => **https://github.com/albertovpd/automated_ML_regression/blob/master/script_explained.ipynb**
 
 
 
-------------------------------------
-
-### Create the ML Cloud Function:
-
-<details>
-  <summary>Under construction</summary>
-
-  - Don't forget to use your service account, the same than the feeding project => URL
-  - It is possible to read from different buckets with the same Cloud Function, yeah.
-    - Ingest several csv from several *REGIONS*
-    - In case it is not possible, I have 2 regions, *EUROPE, USA*. The automation of coping the data of one region to another is necessary. I would like to avoid cron jobs and the Cloud terminal if possible.
+My goal was to have the automated pipeline working. Myself from the future will refactorize the code, perform a better feature selection and optimise everything... Or not, in the end this is a leisure project and the goal is learning. I know now how to do it an also, how to do it way better. Goal accomplished.
 
 </details>
 
-### Load the result again in Storage
+------------------------------
 
-### Load it in a BigQuery table
-
-### Automate everything to append the weekly data, not everything constantly
-
-This is going to be mental, several ideas but still figuring it out. Problem for myself from the future.
-
-
-</details>
-
----------------------------------------------
-
-# Exploring my chances
+# Achievements.
 
 <details>
-  <summary>Under construction</summary>
+  <summary>Click to expand</summary>
+
+The goal was to automate a ML model within a Cloud Function and infer data from a previous ETL. A Cloud Function has 4GB of RAM and 60 seconds of timeout, I fet it like a challenge.
+
+It was the first upgrade of my ETL. It has a lot of room for improvement, but it runs and delivers somehow coherent results, I am happy for that.  
 
 </details>
 
----------------------------------------------
 
-
-# Final script with the regression
-
+# Improvements
 
 <details>
-  <summary>Under construction</summary>
+  <summary>Click to expand</summary>
+
+- Cloud Function with ML regression:
+
+The code is redundant. It requires refactorization, a lot.
+
+- The ML part:
+
+I would like to work with a set of fast models and implement them in the Cloud Function, so maybe every week a defferent model wins. Also, split my data into train/validation/test instead of k-folds for validation.
+
+Instead of performing a multiple linear regression, I want to perform a script in which running a linear regression, multiple times with different targets (it's going to be the same, but it's going to be coded by myself. I know how to do it already and it will be easy and elegant).
 
 </details>
-
----------------------------------------------
-
-# Final script with the regression. Prioritizing speed vs performance.
-
-
-<details>
-  <summary>Under construction</summary>
-
-I am working within a Cloud Function, that means I have 60 seconds as maximum to finish the script and 4G of RAM for processing and loading. It looks like it is not the place for DNN precisely 
-
-</details>
-
----------------------------------------------
-
-
-
-
