@@ -48,10 +48,28 @@ Of course, the goal is automate and implement this to the pipeline, in order to 
 The ETL with which I'm feeding my project is weekly updated on Mondays. I have no rush so I'll run pipelines on Tuesdays.
 
 - Cloud Function reading tables from BigQuery and loading into Cloud Storage bucket (EEUU) => 0 1 * * 2 CET (Belgium). Topic => tuesdays-reading-bq
+- Cloud Function reading from Cloud Storage, applying my ML regression and delivering data again to Storage (EEUU) => 0 2 * * 2 CET (Belgium). Topic => reading_from_cs
 
-- Cloud Function reading from Cloud Storage, applying my ML regression and delivering data again to Storage => 0 2 * * 2 CET (Belgium). Topic => reading_from_cs
+- Transfer ml_regression-unemployment_inferences => Every Tue at 04:30:00 Europe/Paris => Field delimiter: ,  => Header rows: 1
+- Transfer ml_regression-evolution_features => Every Tue at 04:30:00 Europe/Paris => Field delimiter: ,  => Header rows: 1
+- Transfer ml_regression-weekly_score => Every Tue at 04:30:00 Europe/Paris => Field delimiter: ,  => Header rows: 1
 
 
+</details>
+
+
+------------------------------------
+
+### Creating tables in BigQuery
+<details>
+  <summary>Click to expand</summary>
+
+Now that my Cloud Function delivered the results to Cloud Storage, first time I need to load the data into a new dataset (based in EEUU, as my bucket).
+
+- Create tables for every csv delivered in CS
+- Advanced => Header rows to skip:1, comma separated
+
+Once done configure transfer for weekly automated updates to this tables. Beware of timing, you need to wait more or less 1 hour from loading to Storage, if don't, Transfer won't detect new files.
 
 </details>
 
