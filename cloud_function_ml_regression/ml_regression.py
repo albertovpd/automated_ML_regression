@@ -45,9 +45,9 @@ print("training done")
 result=pd.DataFrame()
 result["date"]=df["date"]
 result["real_searches"]=df["unemployment"]
-result["infered_results"]=pd.DataFrame(rfecv.predict(X))
+result["inferred_results"]=pd.DataFrame(rfecv.predict(X))
 
-result["infered_results"]=result["infered_results"].apply(lambda x: 0 if x<0 else round(x,2))
+result["inferred_results"]=result["infered_results"].apply(lambda x: 0 if x<0 else round(x,2))
 result.to_csv("../tmp/results-inferences-overwrite.csv")
 #result.to_csv('gs://your bucket in GCS/results-inferences-overwrite.csv') 
 
