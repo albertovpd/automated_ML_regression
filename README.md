@@ -40,6 +40,24 @@ Of course, the goal is automate and implement this to the pipeline, in order to 
 
 # The Data Engineering behind.
 
+
+### Schedulers
+<details>
+  <summary>Click to expand</summary>
+
+The ETL with which I'm feeding my project is weekly updated on Mondays. I have no rush so I'll run pipelines on Tuesdays.
+
+- Cloud Function reading tables from BigQuery and loading into Cloud Storage bucket (EEUU) => 0 1 * * 2 CET (Belgium). Topic => tuesdays-reading-bq
+
+- Cloud Function reading from Cloud Storage, applying my ML regression and delivering data again to Storage => 0 2 * * 2 CET (Belgium). Topic => reading_from_cs
+
+
+
+</details>
+
+------------------------------------
+
+
 ### Load from BigQuery to Cloud Storage
 <details>
   <summary>Click to expand</summary>
