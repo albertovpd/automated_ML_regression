@@ -3,6 +3,8 @@
 ![alt](output/under_catstruction.jpeg "gatito de la costrucción reza por mí")
 Yeah, in development.
 
+- **Dashboard** => https://datastudio.google.com/s/iGEf2faYhUE
+
 I have at hand an automated ETL ingesting data periodically, it measures many keywords allocated in different BigQuery tables, from different datasets in different regions (*Google Cloud Data Engineer fun here. If you know this pain, pray for me*).  
 
 After processed, the different sources will be merged into a single dataset, with every keyword in a column with values for each week. 
