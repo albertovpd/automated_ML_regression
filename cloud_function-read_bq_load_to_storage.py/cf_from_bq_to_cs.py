@@ -31,5 +31,4 @@ def bigquery_request(self, request):
                location="US",
                job_config=job_config,
           )  
-     #return "Job with ID {} started exporting data from {}.{} to {}".format(extract_job.job_id, dataset_name, table_name, destination_uri)
      return "Job with ID {} started exporting data from {} to {}".format(extract_job.job_id, dataset_name,bucket_name)
