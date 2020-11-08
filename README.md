@@ -59,8 +59,8 @@ The processes involved are shown in *Introduction*.
 
 The ETL with which I'm feeding my project is weekly updated on Mondays. I have no rush so I'll run pipelines on Tuesdays.
 
-- Cloud Function reading tables from BigQuery and loading into Cloud Storage bucket (EEUU) => 0 1 * * 2 CET (Belgium). Topic => tuesdays-reading-bq
-- Cloud Function reading from Cloud Storage, applying my ML regression and delivering data again to Storage (EEUU) => 0 2 * * 2 CET (Belgium). Topic => reading_from_cs
+- Cloud Function reading tables from BigQuery and loading into Cloud Storage bucket (USA) => 0 1 * * 2 CET (Belgium). Topic => tuesdays-reading-bq
+- Cloud Function reading from Cloud Storage, applying my ML regression and delivering data again to Storage (USA) => 0 2 * * 2 CET (Belgium). Topic => reading_from_cs
 
 - Transfer ml_regression-unemployment_inferences => Every Tue at 04:30:00 Europe/Paris => Field delimiter: ,  => Header rows: 1
 - Transfer ml_regression-evolution_features => Every Tue at 04:30:00 Europe/Paris => Field delimiter: ,  => Header rows: 1
@@ -69,7 +69,7 @@ The ETL with which I'm feeding my project is weekly updated on Mondays. I have n
 
 ### Creating tables in BigQuery
 
-Now that my Cloud Function delivered the results to Cloud Storage, I need to load the data into a new dataset in BigQuery (based in EEUU, as my bucket).
+Now that my Cloud Function delivered the results to Cloud Storage, I need to load the data into a new dataset in BigQuery (based in USA, as my bucket).
 
 - Create tables for every csv delivered in CS
 - Advanced => Header rows to skip:1, comma separated
@@ -120,7 +120,7 @@ The processing part of the ML Cloud Function is explained in this jupyter in det
 
 
 
-My goal was to have the automated pipeline working. Myself from the future will refactorize the code, perform a better feature selection and optimise everything... Or not, in the end this is a leisure project and the goal is learning. I know now how to do it an also, how to do it way better. Goal accomplished.
+My goal was to have the automated pipeline working. Myself from the future will work refactoring the code, perform a better feature selection and optimise everything... Or not, in the end this is a leisure project and the goal is learning. I know now how to do it an also, how to do it way better. Goal accomplished.
 
 </details>
 
@@ -131,7 +131,7 @@ My goal was to have the automated pipeline working. Myself from the future will 
 <details>
   <summary>Click to expand</summary>
 
-The goal was to automate a ML model within a Cloud Function and infer data from a previous ETL. A Cloud Function has 4GB of RAM and 60 seconds of timeout, I fet it like a challenge.
+The goal was to automate a ML model within a Cloud Function and infer data from a previous ETL. A Cloud Function has 4GB of RAM and 60 seconds of timeout, I felt it like a challenge. 
 
 It was the first upgrade of my ETL. It has a lot of room for improvement, but it runs and delivers somehow coherent results, I am happy for that.  
 
@@ -145,11 +145,11 @@ It was the first upgrade of my ETL. It has a lot of room for improvement, but it
 
 - Cloud Function with ML regression:
 
-The code is redundant. It requires refactorization, a lot.
+The code is redundant. It requires refactoring, a lot.
 
 - The ML part:
 
-I would like to work with a set of fast models and implement them in the Cloud Function, so maybe every week a defferent model wins. Also, split my data into train/validation/test instead of k-folds for validation.
+I would like to work with a set of fast models and implement them in the Cloud Function, so maybe every week a different model wins. Also, split my data into train/validation/test instead of k-folds for validation.
 
 Instead of performing a multiple linear regression, I want to perform a script in which running a linear regression, multiple times with different targets (it's going to be the same, but it's going to be coded by myself. I know how to do it already and it will be easy and elegant).
 
