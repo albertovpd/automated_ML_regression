@@ -52,7 +52,7 @@ This project consists on:
 <details>
   <summary>Click to expand</summary>
 
-The processes involved are shown in *Introduction*.
+The processes involved are shown in *Introduction*. 
 
 ### Schedulers
 
@@ -154,3 +154,15 @@ I would like to work with a set of fast models and implement them in the Cloud F
 Instead of performing a multiple linear regression, I want to perform a script in which running a linear regression, multiple times with different targets (it's going to be the same, but it's going to be coded by myself. I know how to do it already and it will be easy and elegant).
 
 </details>
+
+-----------------------------
+-----------------------------
+
+
+- More Gdelt and ETL projects => https://github.com/albertovpd/analysing_world_news_with_Gdelt
+
+- https://www.linkedin.com/in/alberto-vargas-pina/
+
+-------------------------------
+
+![alt](output/science_dog.webp)
