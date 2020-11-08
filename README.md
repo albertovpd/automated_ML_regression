@@ -18,9 +18,9 @@
   <summary>Click to expand</summary>
   
 
-Taking advantage of this project ( **https://github.com/albertovpd/automated_etl_google_cloud-social_dashboard** ), I am using the gathered data to feed a ML model with which inferring unemployment searches on Google, in Spain.
+Taking advantage of a former leisure project ( **https://github.com/albertovpd/automated_etl_google_cloud-social_dashboard** ), I am using the gathered data to feed a ML model with which inferring unemployment searches on Google, in Spain.
 
-This project consists on:
+The project consists of:
 
 + Cloud Function A: Loads data from BigQuery tables to Cloud Storage, both in EEUU region. This tables contain requested and filtered info from the Gdelt Project, to analyse online news media in Spain (news section in the automated ETL link).
 
@@ -158,11 +158,19 @@ Instead of performing a multiple linear regression, I want to perform a script i
 -----------------------------
 -----------------------------
 
+### About me:
+<details>
+  <summary>Don't expand this</summary>
+
+--------------------
 
 - More Gdelt and ETL projects => https://github.com/albertovpd/analysing_world_news_with_Gdelt
 
 - https://www.linkedin.com/in/alberto-vargas-pina/
 
--------------------------------
+
+----------------------
 
 ![alt](output/science_dog.webp)
+
+</details>
