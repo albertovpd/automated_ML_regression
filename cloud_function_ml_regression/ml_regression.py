@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+from datetime import datetime, date
+
 from sklearn.feature_selection import RFECV
 from sklearn.linear_model import LinearRegression
 #from sklearn.linear_model import Lasso
@@ -47,14 +49,15 @@ result["date"]=df["date"]
 result["real_searches"]=df["unemployment"]
 result["inferred_results"]=pd.DataFrame(rfecv.predict(X))
 
-result["inferred_results"]=result["infered_results"].apply(lambda x: 0 if x<0 else round(x,2))
+result["inferred_results"]=result["inferred_results"].apply(lambda x: 0 if x<0 else round(x,2))
 result.to_csv("../tmp/results-inferences-overwrite.csv")
 #result.to_csv('gs://your bucket in GCS/results-inferences-overwrite.csv') 
 
 print("csv of inferences to tmp folder done")
 
 # weekly score
-score = pd.DataFrame({"date": [max(df["date"])], 'RMSE': [round(rfecv.score(X_train, target_train),4)]})
+
+score = pd.DataFrame({"date": [datetime.now().date()], 'RMSE': [round(rfecv.score(X_train, target_train),4)]})
 score.to_csv("../tmp/results-weekly_rmse-append.csv")
 # score.to_csv('gs://your bucket in GCS/results-weekly_rmse-append.csv')
 
