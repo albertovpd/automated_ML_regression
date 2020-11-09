@@ -120,8 +120,6 @@ The processing part of the ML Cloud Function is explained in this jupyter in det
 
 
 
-My goal was to have the automated pipeline working. Myself from the future will work refactoring the code, perform a better feature selection and optimise everything... Or not, in the end this is a leisure project and the goal is learning. I know now how to do it an also, how to do it way better. Goal accomplished.
-
 </details>
 
 ------------------------------
@@ -133,7 +131,10 @@ My goal was to have the automated pipeline working. Myself from the future will 
 
 The goal was to automate a ML model within a Cloud Function and infer data from a previous ETL. A Cloud Function has 4GB of RAM and 60 seconds of timeout, I felt it like a challenge. 
 
-It was the first upgrade of my ETL. It has a lot of room for improvement, but it runs and delivers somehow coherent results, I am happy for that.  
+This project has room for improvement, quite a lot. Myself from the future will work refactoring the code, performing a better feature selection and optimizing everything... Or not, in the end this is a leisure project and the goal is learning. I know now how to do it an also, how to do it way better. Goal accomplished.
+
+Finally, it delivers coherent results according to the nature of my entry data, I'm happy for that. 
+
 
 </details>
 
