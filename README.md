@@ -14,13 +14,24 @@
 
 # Introduction.
 
+In this project I am inferring the **Trending Index** for *unemployment searches* in Google Spain.
+
+### What is the Trending Index? How am I feeding my model?
+
 <details>
   <summary>Click to expand</summary>
   
+- What is the Trending Index?
 
-Taking advantage of a former leisure project ( **https://github.com/albertovpd/automated_etl_google_cloud-social_dashboard** ), I am using the gathered data to feed a ML model with which inferring unemployment searches on Google, in Spain.
+Outside Google, you can not know how often a keyword is searched in this Engine Search. The closer approach to that is Google Trends, which has a Python API (Pytrends), and it works as follows: 
 
-The project consists of:
+In your selected range of time, the day/hour with more occurrences of your keyword is scored as 100%, everything else get normalized by that. This is the **Trending Index** and it means that every hour, every day the requested data data can change dramatically. For that reason, every week the whole historic up to date is requested and overwritten, so every week the real_searches curve changes and a new model of inferred_results is trained. 
+
+- How am I feeding my model?
+
+Taking advantage of a former leisure project ( **https://github.com/albertovpd/automated_etl_google_cloud-social_dashboard** ), I am using the gathered data to feed this ML model.
+
+The pipeline consists of:
 
 + Cloud Function A: Loads data from BigQuery tables to Cloud Storage, both in EEUU region. This tables contain requested and filtered info from the Gdelt Project, to analyse online news media in Spain (news section in the automated ETL link).
 
