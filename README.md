@@ -152,8 +152,15 @@ Finally, it delivers coherent results according to the nature of my entry data, 
 
 # Improvements
 
+This project have been done done in my leisure time.  
+All I learn I try to implement here, to reinforce the knowledge, so little by little this project and dashboard will be upgraded, showing better practices and results.
+
+Nevertheless, there's a list of upgrades, also a github dashboard for pending implementations.
+
 <details>
   <summary>Click to expand</summary>
+
+- Dashboard => https://github.com/users/albertovpd/projects/4
 
 - Cloud Function with ML regression:
 

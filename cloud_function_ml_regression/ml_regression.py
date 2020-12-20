@@ -32,11 +32,18 @@ target_test=target.iloc[-4:]
 
 # alpha=1 is like a regular regression. for getter performance use elastic net instead (l1&l2 mix).
 #regression = Lasso(alpha=0.1)
-regression = LinearRegression() # oher model
+# model implementation (to work) 
+
+models={"linear": LinearRegression(), "lasso": Lasso(alpha=0.1)}
 
 # neg mean squared error. it always is negative but what you get is the positive representation
-rfecv = RFECV(estimator=regression, step=1, min_features_to_select=15, cv=5,scoring='neg_mean_squared_error')
-rfecv.fit(X_train, target_train)
+for m in models:
+    print(models.get(m))
+    rfecv = RFECV(estimator=models.get(m), step=1, min_features_to_select=15, cv=5,scoring='neg_mean_squared_error')
+    rfecv.fit(X_train, target_train)
+    #print(rfecv.score(X_train, target_train))
+    if rfecv.score(X_train, target_train) <= 0.98:
+        break
 
 print("training done")
 
