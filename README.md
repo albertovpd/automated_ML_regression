@@ -14,7 +14,14 @@
 
 # Introduction.
 
-In this project I am inferring the **Trending Index** for *unemployment searches* in Google Spain.
+Hi, this project consists in a *ML regression inferring unemployment searches in Google Spain*. Although I believe the idea can be achieved, this is just a sketch to learn ML techniques and automations in Google Cloud Platform.
+
+This project is going to be upgraded little by little for a looong time. Some day the Python script will be really sharpened and this Jupyter will remain obsolete (**check the branches of the project to take a glance of tasks I was performing**), usually in *testing* Jupyters.
+
+Nevertheless I think, at least the *explanation.ipynb* fairly explains my intentions before applying ML (all the df processing).
+
+=> https://datastudio.google.com/s/p1KU6ucP7lI
+
 
 ### What is the Trending Index? How am I feeding my model?
 
