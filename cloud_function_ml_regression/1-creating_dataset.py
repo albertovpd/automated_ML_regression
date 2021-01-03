@@ -1,24 +1,30 @@
 import os
 import pandas as pd
 from my_functions import creating_dataset
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 from dotenv import load_dotenv
 load_dotenv()
 
 # working remote => in .env, save the path without "", like:    df_google   =   ./folder/whatever
 # working on the cloud => the key of your token is the bucket:  df_google   =   gs://<yourbucket>/<yourcsv>)
-df_google= pd.read_csv(os.getenv("df_google"))
+
+df_google= pd.read_csv(os.getenv("df_google"),index_col=[0])
+df_google.sort_values(by=["date"],inplace=True)
 print("google dataset loaded")
 
 df_economical=pd.read_csv(os.getenv("df_economical"))
+df_economical.sort_values(by=["Date"],inplace=True)
+
 df_political=pd.read_csv(os.getenv("df_political"))
+df_political.sort_values(by=["Date"],inplace=True)
+
 df_social=pd.read_csv(os.getenv("df_social"))
+df_social.sort_values(by=["Date"],inplace=True)
+
 print("gdelt datasets loaded")
 
-df_google.drop(columns='Unnamed: 0', inplace=True)
-
-# creating df for google
+# creating df
 df_google_dates=pd.DataFrame()
 
 # creating the Date column in new dataset
@@ -32,29 +38,31 @@ keyword_list.sort()
 for k in keyword_list:
     df_google_dates[k]=df_google[(df_google['keyword'] == k)]["trend_index"].tolist()
 
-
-# Using my function to create columns from keywords with Gdelt datasets
+# News datasets
 dfp = creating_dataset(df_political,"political")
 dfs = creating_dataset(df_social,"social")
 dfe = creating_dataset(df_economical,"economical")
 
+# Merging datasets
+datasets = [ dfp, dfe, dfs,df_google_dates]
+date2 = []
+
+for d in datasets:
+    date2. append(d.date.max()) # get the later date of every dataset
+    
+date2 = max(date2) 
+
 # creating final dataset with everything
-date1 = '2019-01-01'
-date2 = datetime.now().date()
-#date2="2020-10-18"
+date1 = '2019-01-01' 
 mydates = pd.date_range(date1, date2, freq="W").tolist()
 df_final=pd.DataFrame()
 df_final["date"]=mydates
 df_final['date']=pd.to_datetime(df_final["date"])
 
-datasets = [ dfp, dfe, dfs,df_google_dates]
-
 for d in datasets:
-    df_final=df_final.merge(d,how='left', left_on="date", right_on="date")
+    df_final=df_final.merge(d,how='left', left_on="date", right_on="date",suffixes=["_1","_2"])
 
 df_final=df_final.fillna(0)
 df_final.to_csv("../tmp/dataset_final.csv")
 
-
 print("raw dataset created")
-

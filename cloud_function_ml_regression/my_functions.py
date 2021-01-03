@@ -31,7 +31,6 @@ def creating_dataset(df,column):
     df_final = df_final.resample('W-SUN').mean() #weekly totals
     df_final.sort_values(by="date", ascending=True, inplace=True)
     df_final["date"]=df_final.index
-    df_final.reset_index(drop=True, inplace=True)
-    
+    df_final.reset_index(drop=True, inplace=True)    
     
     return df_final
