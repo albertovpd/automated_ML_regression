@@ -38,6 +38,8 @@ keyword_list.sort()
 for k in keyword_list:
     df_google_dates[k]=df_google[(df_google['keyword'] == k)]["trend_index"].tolist()
 
+df_google_dates.rename(columns={'desempleo':"unemployment"}, inplace=True)
+
 # News datasets
 dfp = creating_dataset(df_political,"political")
 dfs = creating_dataset(df_social,"social")
