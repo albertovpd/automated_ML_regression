@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 from my_functions import creating_dataset
-from datetime import datetime, date, timedelta
+from datetime import datetime, date
 
 from dotenv import load_dotenv
 load_dotenv()

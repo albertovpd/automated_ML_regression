@@ -1,4 +1,5 @@
-import datetime
+# i need to import libraries here to avoid conflicts
+from datetime import datetime, timedelta
 import numpy as np
 
 def main (data,context):
@@ -12,8 +13,8 @@ def main (data,context):
     processes= [
         "1-creating_dataset.py",
         "2-processing_dataset.py",
-        "3-ml_regression.py",
-        "4-sending_to_cs.py"
+        "3-ml_regression.py"
+        #,"4-sending_to_cs.py"
                 ] 
 
     for p in processes:
