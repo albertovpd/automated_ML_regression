@@ -15,6 +15,7 @@ tmp/
 gcp_place.py
 .env 
 .ipynb_checkpoints
+__pycache__
 
 # Distribution / packaging
 .Python

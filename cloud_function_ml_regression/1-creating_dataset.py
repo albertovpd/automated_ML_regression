@@ -66,5 +66,5 @@ for d in datasets:
 
 df_final=df_final.fillna(0)
 df_final.to_csv("../tmp/dataset_final.csv")
-
+df_final.to_csv("../tmp/initial_dataset.csv")   #<====================================
 print("raw dataset created")
