@@ -6,6 +6,8 @@ import matplotlib.font_manager
 
 from sklearn.feature_selection import VarianceThreshold
 
+
+
 def variance_threshold_selector(data, threshold):
     '''
     It removes any attribute (column) than vary less than the percentaje of the threshold

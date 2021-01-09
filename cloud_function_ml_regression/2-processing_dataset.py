@@ -9,7 +9,6 @@ from sklearn.covariance import EllipticEnvelope
 
 import matplotlib.pyplot as plt
 import matplotlib.font_manager
-
 from my_functions import outliers_graph
 
 
@@ -55,6 +54,6 @@ plot_min=int(min(list(pca_data.min())))
 plot_max=int(max(list(pca_data.max())))
 outliers_graph(pca_data, outlier_method, 150, threshold, plot_min, plot_max)
 
-df.to_csv("../tmp/dataset_final_processed.csv") #<========================
+df.to_csv("../tmp/dataset_final_processed.csv") 
 
 print("dataset without outliers sent to /tmp")

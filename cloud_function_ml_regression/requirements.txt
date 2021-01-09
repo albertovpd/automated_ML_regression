@@ -1,6 +1,6 @@
 gcsfs==0.6.1  
 importlib-metadata==1.6.0
-google-cloud-storage
+google-cloud-storage==1.35.0
 numpy==1.19.1
 pandas==1.0.3 
 datetime

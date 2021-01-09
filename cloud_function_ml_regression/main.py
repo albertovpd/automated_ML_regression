@@ -1,6 +1,8 @@
 # i need to import libraries here to avoid conflicts
 from datetime import datetime, timedelta
 import numpy as np
+#from google.cloud import storage
+
 
 def main (data,context):
 
@@ -14,8 +16,9 @@ def main (data,context):
         "1-creating_dataset.py",
         "2-processing_dataset.py",
         "3-ml_regression.py"
-        #,"4-sending_to_cs.py"
-                ] 
+        #,
+        #"4-sending_pics_to_storage.py"
+                 ] 
 
     for p in processes:
         exec(open(p).read())
