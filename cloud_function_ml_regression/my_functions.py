@@ -6,7 +6,21 @@ import matplotlib.font_manager
 
 from sklearn.feature_selection import VarianceThreshold
 
-
+def scientific_rounding(value):
+    '''
+    This function pretended to display decimals in scientific notation, avoiden large decimal numbers.
+    It's not done yet, but it rounds nicely I believe depending on the zeros in the left.
+    '''
+    number= str(value)
+    number= number.split(".")
+    d=0
+    for n in list(number[1]):
+        if n=="0" or int(n)<=5:
+            d+=1
+        else:
+            break
+    #print(d)
+    return round(value,d+1)
 
 def variance_threshold_selector(data, threshold):
     '''

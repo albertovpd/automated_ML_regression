@@ -6,7 +6,7 @@ from scipy import stats
 
 from datetime import datetime
 
-from my_functions import variance_threshold_selector
+from my_functions import variance_threshold_selector, scientific_rounding
 
 from sklearn.covariance import EllipticEnvelope
 import matplotlib.pyplot as plt
@@ -57,24 +57,19 @@ today=datetime.now().date()
 
 #----------------- ML -----------------
 # Minimal number of features to play with
+regression = Lasso(alpha=0.1,
+                   max_iter=10000, 
+                  random_state=42)
+
 min_number_features =  df.shape[0]//10
-regression = Lasso(alpha=0.1)
-#regression = LinearRegression()
 rfecv = RFECV(estimator=regression,
-              step=2, 
+              step=1, 
               min_features_to_select=min_number_features, 
               cv=KFold(n_splits=10,
                     shuffle=True,
                     random_state=42),
               scoring='neg_mean_squared_error')
 rfecv.fit(X_train, target_train)
-
-#weekly_score
-weekly_score= pd.DataFrame()
-weekly_score["rmse"]=pd.Series(rfecv.score(X_train, target_train))
-weekly_score["date"]=pd.to_datetime(today)
-weekly_score.to_cvs("../tmp/weekly_score.csv")
-#weekly_score.to_csv("gs://--yourbucket--/weekly_score.csv") #<========================= 4
 
 # comparison real searches vs inferred results
 inferred_results=list(rfecv.predict(X)) # this is just to avoid generating nans in df
@@ -89,14 +84,39 @@ if result["inferred_results"].min()==0:
 result.to_csv("../tmp/results-inferences-overwrite.csv")
 #result.to_csv("gs://--yourbucket--/results-inferences-overwrite.csv") # <=============================== 5
 
+#-------------------- weekly_scores ------------------------------------
+mean = result.real_searches.head(-5).mean()
+N = len(result.real_searches.head(-5))
 
-number_features=pd.DataFrame()
-number_features["number_columns"]=pd.Series(rfecv.n_features_)
-number_features["date"]= pd.to_datetime(today)
-number_features.to_csv("../tmp/number_features_this_week.csv")
-#number_features.to_csv("gs://--yourbucket--/number_features_this_week.csv") # <===================== 6
+rmse = scientific_rounding(rfecv.score(X_train, target_train))
 
-# features performance
+relative_error = abs(((result.real_searches.head(-5)-result.inferred_results.head(-5))/result.real_searches.head(-5)).mean())
+relative_error = scientific_rounding(relative_error)
+
+mse = ( (result.inferred_results - mean)**2 / (N*(N-1)) ).mean()
+mse = scientific_rounding(mse)
+
+mean = result.real_searches.head(-5).mean()
+N = len(result.real_searches.head(-5))
+standard_error = (( (result.inferred_results - mean)**2 / (N*(N-1)) )**0.5).mean()
+standard_error=scientific_rounding(standard_error)
+
+chosen_features= rfecv.n_features_
+
+metrics={"date":[today],
+         "selected_columns":[chosen_features],
+         "rmse":[rmse],
+         "mse":[mse], 
+         "relative_error":[relative_error],
+         "standard_error":[standard_error]
+        }
+
+weekly_score=pd.DataFrame.from_dict(metrics)
+weekly_score.to_csv("../tmp/weekly_score.csv") #<=====================
+#weekly_score.to_csv("gs://--yourbucket--/weekly_score.csv") #<========================= 4
+
+
+# features performance plot
 plt.figure(figsize=(16, 9))
 plt.title('Recursive Feature Elimination with Cross-Validation', fontsize=34, pad=20)
 plt.xlabel('Number of features selected', fontsize=28, labelpad=20)
