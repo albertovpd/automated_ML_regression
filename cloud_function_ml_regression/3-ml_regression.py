@@ -56,20 +56,34 @@ target_test=target.iloc[-4:]
 today=datetime.now().date()
 
 #----------------- ML -----------------
-# Minimal number of features to play with
-regression = Lasso(alpha=0.1,
-                   max_iter=10000, 
-                  random_state=42)
 
-min_number_features =  df.shape[0]//10
-rfecv = RFECV(estimator=regression,
-              step=1, 
-              min_features_to_select=min_number_features, 
-              cv=KFold(n_splits=10,
-                    shuffle=True,
-                    random_state=42),
-              scoring='neg_mean_squared_error')
-rfecv.fit(X_train, target_train)
+min_number_features =  df.shape[0]//10 # Min number of features to play with
+
+
+regression = Lasso(alpha=0.1
+                       #,
+                       #max_iter=10000, 
+                      #random_state=42
+                      )
+
+# overfitting ñapa turbomierder XXL omg x3
+random_number=42
+for _ in list(range(10)):                       
+    rfecv = RFECV(estimator=regression,
+                step=0.1, 
+                  min_features_to_select=min_number_features, 
+                  cv=KFold(n_splits=10,
+                        shuffle=True,
+                        random_state=random_number),
+                  scoring='neg_mean_squared_error')
+                       
+    rfecv.fit(X_train, target_train)
+    score = rfecv.score(X_train, target_train)
+    random_number+=1
+    if score<0.99:
+        break
+            
+#--------------------------
 
 # comparison real searches vs inferred results
 inferred_results=list(rfecv.predict(X)) # this is just to avoid generating nans in df
