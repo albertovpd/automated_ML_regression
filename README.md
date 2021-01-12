@@ -14,14 +14,7 @@
 
 # Introduction.
 
-Hi, this project consists in a *ML regression inferring unemployment searches in Google Spain*. Although I believe the idea can be achieved, this is just a sketch to learn ML techniques and automations in Google Cloud Platform.
-
-This project is going to be upgraded little by little for a looong time. Some day the Python script will be really sharpened and this Jupyter will remain obsolete (**check the branches of the project to take a glance of tasks I was performing**), usually in *testing* Jupyters.
-
-Nevertheless I think, at least the *explanation.ipynb* fairly explains my intentions before applying ML (all the df processing).
-
-=> https://datastudio.google.com/s/p1KU6ucP7lI
-
+In this project I am inferring the **Trending Index** for *unemployment searches* in Google Spain.
 
 ### What is the Trending Index? How am I feeding my model?
 
@@ -159,15 +152,8 @@ Finally, it delivers coherent results according to the nature of my entry data, 
 
 # Improvements
 
-This project have been done done in my leisure time.  
-All I learn I try to implement here, to reinforce the knowledge, so little by little this project and dashboard will be upgraded, showing better practices and results.
-
-Nevertheless, there's a list of upgrades, also a github dashboard for pending implementations.
-
 <details>
   <summary>Click to expand</summary>
-
-- Dashboard => https://github.com/users/albertovpd/projects/4
 
 - Cloud Function with ML regression:
 

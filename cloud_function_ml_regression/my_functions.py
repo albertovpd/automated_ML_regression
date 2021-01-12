@@ -1,4 +1,68 @@
 import pandas as pd 
+import numpy as np
+
+import matplotlib.pyplot as plt
+import matplotlib.font_manager
+
+from sklearn.feature_selection import VarianceThreshold
+
+def scientific_rounding(value):
+    '''
+    Rounding decimals according to the the 1st non zero element (kind of)
+    '''
+    number= str(value)
+    number= number.split(".")
+    d=0
+    for e in list(range(len(number[1]))):
+        if number[1][e]=="0":
+            d+=1
+        else:
+            break
+    if d!=0:
+        value=round(value,d+1)
+    else:   # else means we'll have numbers without left zeroes that we shouldn't round to 1.
+        value=round(value,3)
+    return value
+
+def variance_threshold_selector(data, threshold):
+    '''
+    It removes any attribute (column) than vary less than the percentaje of the threshold
+    '''
+    selector = VarianceThreshold(threshold)
+    selector.fit(data)
+    return data[data.columns[selector.get_support(indices=True)]]
+    
+
+def outliers_graph(df, outlier_method, outliers_begin, threshold, xmin, xmax):
+    '''
+    Performs a 2D representation of outliers. By Adrián Colomer
+    '''
+    
+    xx, yy = np.meshgrid(np.linspace(xmin, xmax, 100), np.linspace(xmin, xmax, 100))
+    Z = outlier_method.decision_function(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+    plt.figure(figsize=(20, 14))
+    plt.contourf(xx, yy, Z, levels=np.linspace(Z.min(), threshold, xmax), cmap=plt.cm.Blues_r)
+    a = plt.contour(xx, yy, Z, levels=[threshold], linewidths=2, colors='red')
+    plt.contourf(xx, yy, Z, levels=[threshold, Z.max()], colors='orange')
+    b = plt.scatter(df.iloc[:outliers_begin, 0], df.iloc[:outliers_begin, 1], c='white', s=20, edgecolor='k')
+    c = plt.scatter(df.iloc[outliers_begin:, 0], df.iloc[outliers_begin:, 1], c='white', s=20, edgecolor='k')
+    plt.axis('tight')
+    '''
+    # In case I'll use the axis unemployment and 1D proyection
+    plt.ylim((-5,105)) # forcing the graph to fit my target range
+    plt.title('Elliptic envelope over my target and a 1D proyection of my training set', fontsize=20)
+    plt.xlabel('1D proyection', fontsize=16)
+    plt.ylabel('Unemployment', fontsize=16)
+    #
+    '''
+    plt.legend(
+        [a.collections[0], b, c],
+        ['Decision boundary', 'Valid instances', 'Outliers'],
+        prop=matplotlib.font_manager.FontProperties(size=34),
+        loc='lower right')
+    plt.savefig('../tmp/outliers.png') #<========================================
+
 
 def creating_dataset(df,column):
     '''
@@ -31,7 +95,7 @@ def creating_dataset(df,column):
     df_final = df_final.resample('W-SUN').mean() #weekly totals
     df_final.sort_values(by="date", ascending=True, inplace=True)
     df_final["date"]=df_final.index
-    df_final.reset_index(drop=True, inplace=True)
-    
+    df_final.reset_index(drop=True, inplace=True)    
     
     return df_final
+
