@@ -8,19 +8,21 @@ from sklearn.feature_selection import VarianceThreshold
 
 def scientific_rounding(value):
     '''
-    This function pretended to display decimals in scientific notation, avoiden large decimal numbers.
-    It's not done yet, but it rounds nicely I believe depending on the zeros in the left.
+    Rounding decimals according to the the 1st non zero element (kind of)
     '''
     number= str(value)
     number= number.split(".")
     d=0
-    for n in list(number[1]):
-        if n=="0" or int(n)<=5:
+    for e in list(range(len(number[1]))):
+        if number[1][e]=="0":
             d+=1
         else:
             break
-    #print(d)
-    return round(value,d+1)
+    if d!=0:
+        value=round(value,d+1)
+    else:   # else means we'll have numbers without left zeroes that we shouldn't round to 1.
+        value=round(value,3)
+    return value
 
 def variance_threshold_selector(data, threshold):
     '''

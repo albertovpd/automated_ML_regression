@@ -22,7 +22,7 @@ from sklearn.model_selection import cross_val_score
 #from sklearn.ensemble import RandomForestRegressor
 
 
-
+from sklearn.metrics import mean_squared_error, explained_variance_score, max_error, mean_absolute_error,median_absolute_error, r2_score
 df=pd.read_csv("../tmp/dataset_final_processed.csv",index_col=[0])
 low_v = df.drop(columns=["date","unemployment","outliers_score" ])  
 X_raw= variance_threshold_selector(low_v, 5) # removing values than vary less than 5%
@@ -101,28 +101,35 @@ result.to_csv("../tmp/results-inferences-overwrite.csv")
 #-------------------- weekly_scores ------------------------------------
 mean = result.real_searches.head(-5).mean()
 N = len(result.real_searches.head(-5))
+y_real=result.real_searches.head(-5) 
+y_pred=result.inferred_results.head(-5)
 
-rmse = scientific_rounding(rfecv.score(X_train, target_train))
+algo_mse = scientific_rounding(rfecv.score(X_train, target_train))
+algo_rmse = scientific_rounding(np.sqrt(algo_mse))
 
-relative_error = abs(((result.real_searches.head(-5)-result.inferred_results.head(-5))/result.real_searches.head(-5)).mean())
-relative_error = scientific_rounding(relative_error)
-
-mse = ( (result.inferred_results - mean)**2 / (N*(N-1)) ).mean()
-mse = scientific_rounding(mse)
-
-mean = result.real_searches.head(-5).mean()
-N = len(result.real_searches.head(-5))
-standard_error = (( (result.inferred_results - mean)**2 / (N*(N-1)) )**0.5).mean()
-standard_error=scientific_rounding(standard_error)
-
-chosen_features= rfecv.n_features_
+metrics_evs= scientific_rounding(explained_variance_score(y_real,y_pred))
+metrics_maxerror=scientific_rounding(max_error(y_real,y_pred))
+metrics_mae=scientific_rounding(mean_absolute_error(y_real,y_pred))
+metrics_median_ae=scientific_rounding(median_absolute_error(y_real,y_pred))
+metrics_r2score=scientific_rounding(r2_score(y_real,y_pred))
+metrics_rmse=scientific_rounding(mean_squared_error(y_real, y_pred, squared=False))
+metrics_mse=scientific_rounding(mean_squared_error(y_real, y_pred, squared=True))
+calc_rmse= scientific_rounding(np.linalg.norm(y_pred-y_real)/np.sqrt(N))
+mape= scientific_rounding( np.mean(np.abs((y_real-y_pred)/y_real)) )*100
 
 metrics={"date":[today],
-         "selected_columns":[chosen_features],
-         "rmse":[rmse],
-         "mse":[mse], 
-         "relative_error":[relative_error],
-         "standard_error":[standard_error]
+         "selected_columns":[rfecv.n_features_],
+         "mape":[mape],
+         "calc_rmse":[calc_rmse],
+         "metrics_mse":[metrics_mse],
+         "metrics_rmse":[metrics_rmse],
+         "metrics_r2score":[metrics_r2score],
+         "metrics_median_ae":[metrics_median_ae],
+         "metrics_mae":[metrics_mae],
+         "metrics_maxerror":[metrics_maxerror],
+         "metrics_evs":[metrics_evs],
+         "algo_rmse":[algo_rmse],
+         "algo_mse":[algo_mse]
         }
 
 weekly_score=pd.DataFrame.from_dict(metrics)
