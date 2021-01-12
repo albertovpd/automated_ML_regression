@@ -14,7 +14,10 @@
 
 # Introduction.
 
-In this project I am inferring the **Trending Index** for *unemployment searches* in Google Spain.
+I am inferring the **Trending Index** for *unemployment searches* in Google Spain.
+
+In this a leisure project to reinforce knowledge about Machine Learning, automation and display in Google Cloud Platform. 
+It is going to be upgraded veeery slowly, if something that catch your eye but you don't find it, maybe it's still in other branches.
 
 ### What is the Trending Index? How am I feeding my model?
 
@@ -35,21 +38,23 @@ The pipeline consists of:
 
 + Cloud Function A: Loads data from BigQuery tables to Cloud Storage, both in EEUU region. This tables contain requested and filtered info from the Gdelt Project, to analyse online news media in Spain (news section in the automated ETL link).
 
-- Cloud Function B: 
+- Cloud Function B (at the moment): 
   - Reads the data of Cloud Function A, and other data from a bucket in EU. This bucket contains requested info from Google Trends in Spain (Google searches section in the automated ETL link).
   - Merges datasets with different length and dates.
   - Processes them and creates a column and score for each keyword.
-  - Normalizes the final dataset.
+  - Standarize/Normalizes the final dataset.
   - Associate date with index, but dates are not in the game, so a time series problem was turned into a linear regression one. Check it out the full script explanation here.
-  - Performs a Recursive Feature Elimination to select the best 20 features of 130 I have to play with.
+  - Outliers removal
+  - Low variance features removal
+  - Performs a Recursive Feature Elimination to select the best features of 130 I have to play with.
   - Apply a linear regression to infer my keyword, in this case, unemployment. 
-  - Loads the results in a Cloud Storage bucket.
+  - Loads results in a Cloud Storage bucket.
 
-+ Both Cloud Functions are triggered by Pub/Sub and Scheduler. Scripts can be found here.
++ Both Cloud Functions are triggered by different Pub/Sub and Schedulers. Scripts can be found here.
 
-+ Weekly loaded to BigQuery tables with Transfer. Some results appended to the existing tables and some overwritten. 
++ Weekly loaded from Storage to BigQuery tables with Transfer. 
 
-+ Plot the BigQuery tables.
++ Plot results in Data Studio.
 
 </details>
 
