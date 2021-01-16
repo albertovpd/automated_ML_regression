@@ -15,11 +15,14 @@ import matplotlib.font_manager
 from sklearn.feature_selection import RFECV
 from sklearn.model_selection import KFold
 from sklearn.model_selection import StratifiedKFold
-#from sklearn.linear_model import LinearRegression
-from sklearn.linear_model import Lasso
 from sklearn.model_selection import cross_val_score
 #from sklearn.tree import DecisionTreeRegressor
 #from sklearn.ensemble import RandomForestRegressor
+#
+from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Ridge
+from sklearn.linear_model import Lasso
+#
 
 
 from sklearn.metrics import mean_squared_error, explained_variance_score, max_error, mean_absolute_error,median_absolute_error, r2_score
@@ -59,11 +62,12 @@ today=datetime.now().date()
 
 min_number_features =  df.shape[0]//10 # Min number of features to play with
 
-
+#regression= LinearRegression()
 regression = Lasso(alpha=0.1,
                   selection="random",
                   max_iter=10000,
                   random_state=42)
+#regression= Ridge(alpha=0.1,max_iter=10000, solver='auto', random_state=42)
 
 # overfitting ñapa turbomierder XXL omg x3
 random_number=42
@@ -120,7 +124,13 @@ metrics_cross_val_score=[
                          "neg_median_absolute_error"
                         ]
 for m in metrics_cross_val_score:
-    score=cross_val_score(regression, X_train, target_train, cv = KFold(n_splits=10), scoring=m)
+    score=cross_val_score(regression, 
+        X_train, 
+        target_train, 
+        cv=KFold(n_splits=10,
+            shuffle=True,
+            random_state=random_number),
+        scoring=m)
     score= [-score.mean()/mean,score.std()/mean]    
 
     metrics[m]=round(score[0],2)
@@ -152,36 +162,6 @@ weekly_score.rename(columns={"neg_root_mean_squared_error":"rmse",
                          "neg_median_absolute_error":"median_ae"},
                     inplace=True)
 
-
-# algo_mse = scientific_rounding(rfecv.score(X_train, target_train))
-# algo_rmse = scientific_rounding(np.sqrt(algo_mse))
-
-# metrics_evs= scientific_rounding(explained_variance_score(y_real,y_pred))
-# metrics_maxerror=scientific_rounding(max_error(y_real,y_pred))
-# metrics_mae=scientific_rounding(mean_absolute_error(y_real,y_pred))
-# metrics_median_ae=scientific_rounding(median_absolute_error(y_real,y_pred))
-# metrics_r2score=scientific_rounding(r2_score(y_real,y_pred))
-# metrics_rmse=scientific_rounding(mean_squared_error(y_real, y_pred, squared=False))
-# metrics_mse=scientific_rounding(mean_squared_error(y_real, y_pred, squared=True))
-# calc_rmse= scientific_rounding(np.linalg.norm(y_pred-y_real)/np.sqrt(N))
-# mape= scientific_rounding( np.mean(np.abs((y_real-y_pred)/y_real)) )*100
-
-# metrics={"date":[today],
-#          "selected_columns":[rfecv.n_features_],
-#          "mape":[mape],
-#          "calc_rmse":[calc_rmse],
-#          "metrics_mse":[metrics_mse],
-#          "metrics_rmse":[metrics_rmse],
-#          "metrics_r2score":[metrics_r2score],
-#          "metrics_median_ae":[metrics_median_ae],
-#          "metrics_mae":[metrics_mae],
-#          "metrics_maxerror":[metrics_maxerror],
-#          "metrics_evs":[metrics_evs],
-#          "algo_rmse":[algo_rmse],
-#          "algo_mse":[algo_mse]
-#         }
-
-#weekly_score=pd.DataFrame.from_dict(metrics)
 weekly_score.to_csv("../tmp/weekly_score.csv") #<=====================
 #weekly_score.to_csv("gs://--yourbucket--/weekly_score.csv") #<========================= 4
 
