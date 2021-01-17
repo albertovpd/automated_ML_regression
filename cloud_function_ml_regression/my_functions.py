@@ -7,23 +7,20 @@ import matplotlib.font_manager
 from sklearn.feature_selection import VarianceThreshold
 
 def scientific_rounding(value):
-    '''
-    Rounding decimals according to the the 1st non zero element (kind of)
-    '''
-    number= str(value)
-    number= number.split(".")
-    d=0
-    for e in list(range(len(number[1]))):
-        if number[1][e]=="0":
-            d+=1
-        else:
-            break
-    if d!=0:
-        value=round(value,d+1)
-    else:   # else means we'll have numbers without left zeroes that we shouldn't round to 1.
-        value=round(value,3)
-    return value
+    error=str(value[1]).split(".")
+    if error[0]!="0":
+        
+        return str(int(value[0]))+"+-"+str(int(value[1]))
+    else:
+        d=0
+        for e in list(error[1]):
+            if e=="0":
+                d+=1
+            else:
+                break
+        return str(round(value[0],d+2))+"+-"+str(round(value[1],d+2))
 
+        
 def variance_threshold_selector(data, threshold):
     '''
     It removes any attribute (column) than vary less than the percentaje of the threshold
