@@ -16,8 +16,8 @@
 
 I am inferring the **Trending Index** for *unemployment searches* in Google Spain.
 
-In this a leisure project to reinforce knowledge about Machine Learning, automation and display in Google Cloud Platform. 
-It is going to be upgraded veeery slowly, if something that catch your eye but you don't find it, maybe it's still in other branches.
+This a leisure project to reinforce knowledge about Machine Learning, automation and display in Google Cloud Platform. 
+It is going to be upgraded veeery slowly, if you don't find something that catches your eye in the dashboard, check other branches out.
 
 ### What is the Trending Index? How am I feeding my model?
 
@@ -94,6 +94,8 @@ Now that my Cloud Function delivered the results to Cloud Storage, I need to loa
 
 Once the tables are created is necessary to configure Transfer for weekly automated updates of the tables. Beware of timing, you need to wait more or less 1 hour from loading to Storage, if don't, Transfer won't detect new files.
 
+**WARNING:** as result of the Cloud Function output, there are new CSVs in Storage. If you modify the CF to get different fields in the CSVs, you also need to update the BigQuery tables to exactly match the new changes. If don't, transfer will fail.
+
 ### Load from BigQuery to Cloud Storage
 
 
@@ -132,8 +134,9 @@ Extras, configuration:
 Here **https://github.com/albertovpd/automated_ML_regression/tree/master/cloud_function_ml_regression** you will find the Cloud Function script.
 
 
-The processing part of the ML Cloud Function is explained in this jupyter in detail => **https://github.com/albertovpd/automated_ML_regression/blob/master/script_explained.ipynb**
+The processing part of the ML Cloud Function has changed with time. At the moment, the most updated jupyter is this one => **https://github.com/albertovpd/automated_ML_regression/blob/master/testing_ml.ipynb**
 
+This explains the processing of data before ML => https://github.com/albertovpd/automated_ML_regression/blob/master/testing_processing.ipynb
 
 
 </details>
@@ -149,7 +152,9 @@ The goal was to automate a ML model within a Cloud Function and infer data from 
 
 This project has room for improvement, quite a lot. Myself from the future will work refactoring the code, performing a better feature selection and optimizing everything... Or not, in the end this is a leisure project and the goal is learning. I know now how to do it an also, how to do it way better. Goal accomplished.
 
-Finally, it delivers coherent results according to the nature of my entry data, I'm happy for that. 
+Finally, it delivers coherent results according to the nature of my entry data, I'm happy for that, nevertheless the associated uncertainty of every metric tends to be really big.
+
+In Physics (long story short), an acceptable error is 3 orders of magnitude lower than the measurement. I think I won't be able to reach that level with this project, but anyway,associated uncertainties must be shown, period.
 
 
 </details>
@@ -161,14 +166,12 @@ Finally, it delivers coherent results according to the nature of my entry data, 
   <summary>Click to expand</summary>
 
 - Cloud Function with ML regression:
-
-The code is redundant. It requires refactoring, a lot.
+    - The code is redundant. It requires refactoring.
 
 - The ML part:
-
-I would like to work with a set of fast models and implement them in the Cloud Function, so maybe every week a different model wins. Also, split my data into train/validation/test instead of k-folds for validation.
-
-Instead of performing a multiple linear regression, I want to perform a script in which running a linear regression, multiple times with different targets (it's going to be the same, but it's going to be coded by myself. I know how to do it already and it will be easy and elegant).
+    - I would like to work with a set of fast models and implement them in the Cloud Function, so maybe every week a different model wins, and display the weekly winner in the dashboard with the rest of metrics.
+    - Associated uncertainties must be improved. 
+    - Perform a multiple linear regression to infer more metrics.
 
 </details>
 
