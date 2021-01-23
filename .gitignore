@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+testing_ml.ipynb
+testing_processing.ipynb
+
 # C extensions
 *.so
 debug.ipynb
