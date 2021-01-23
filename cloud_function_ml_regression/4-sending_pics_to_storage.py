@@ -19,7 +19,7 @@ def upload_blob(source_file_name, destination_blob_name):
         )
     )
 
-print("UPLOADING PICS")
+#print("UPLOADING PICS")
 upload_blob("../tmp/RFE_columns.png","RFE_columns.png")
 upload_blob("../tmp/outliers.png","outliers.png")
-print("PICS SENT")
+#print("PICS SENT")
