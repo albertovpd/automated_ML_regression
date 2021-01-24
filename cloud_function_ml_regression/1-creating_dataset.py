@@ -11,7 +11,7 @@ load_dotenv()
 
 df_google= pd.read_csv("../tmp/data_pytrends.csv")
 df_google.sort_values(by=["date"],inplace=True)
-print("google dataset loaded")
+print("1: google dataset loaded")
 
 df_economical=pd.read_csv("../tmp/dashboard_spanish_news_economical.csv.gz",compression='gzip', header=0, quotechar='"', error_bad_lines=False)
 df_economical.sort_values(by=["Date"],inplace=True)
@@ -22,7 +22,7 @@ df_political.sort_values(by=["Date"],inplace=True)
 df_social=pd.read_csv("../tmp/dashboard_spanish_news_social.csv.gz",compression='gzip', header=0, quotechar='"', error_bad_lines=False)
 df_social.sort_values(by=["Date"],inplace=True)
 
-print("gdelt datasets loaded")
+print("1: gdelt datasets loaded")
 
 # creating df
 df_google_dates=pd.DataFrame()
@@ -67,6 +67,6 @@ for d in datasets:
 df_final=df_final.fillna(0)
 df_final.to_csv("../tmp/dataset_final.csv")
 #df_final.to_csv("gs://--yourbucket--/step1-df_merged.csv")   #<==================================== 2
-print("raw dataset created")
+print("1: raw dataset created")
 
 

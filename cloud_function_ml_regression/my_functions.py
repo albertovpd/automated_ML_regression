@@ -31,19 +31,16 @@ def variance_threshold_selector(data, threshold):
     
 
 def outliers_graph(df, outlier_method, outliers_begin, threshold, xmin, xmax):
-    '''
-    Performs a 2D representation of outliers. By Adrián Colomer
-    '''
     
     xx, yy = np.meshgrid(np.linspace(xmin, xmax, 100), np.linspace(xmin, xmax, 100))
     Z = outlier_method.decision_function(np.c_[xx.ravel(), yy.ravel()])
     Z = Z.reshape(xx.shape)
     plt.figure(figsize=(20, 14))
     plt.contourf(xx, yy, Z, levels=np.linspace(Z.min(), threshold, xmax), cmap=plt.cm.Blues_r)
-    a = plt.contour(xx, yy, Z, levels=[threshold], linewidths=2, colors='red')
-    plt.contourf(xx, yy, Z, levels=[threshold, Z.max()], colors='orange')
+    #a = plt.contour(xx, yy, Z, levels=[threshold], linewidths=2, colors='red')
+    #plt.contourf(xx, yy, Z, levels=[threshold, Z.max()], colors='orange')
     b = plt.scatter(df.iloc[:outliers_begin, 0], df.iloc[:outliers_begin, 1], c='white', s=20, edgecolor='k')
-    c = plt.scatter(df.iloc[outliers_begin:, 0], df.iloc[outliers_begin:, 1], c='white', s=20, edgecolor='k')
+    c = plt.scatter(df.iloc[outliers_begin:, 0], df.iloc[outliers_begin:, 1], c='black', s=20, edgecolor='k')
     plt.axis('tight')
     '''
     # In case I'll use the axis unemployment and 1D proyection
@@ -54,12 +51,13 @@ def outliers_graph(df, outlier_method, outliers_begin, threshold, xmin, xmax):
     #
     '''
     plt.legend(
-        [a.collections[0], b, c],
-        ['Decision boundary', 'Valid instances', 'Outliers'],
+        [b,c],["Valid instances", "outliers"],
+        #[a.collections[0], b, c],
+        #['Decision boundary', 'Valid instances', 'Outliers'],
         prop=matplotlib.font_manager.FontProperties(size=34),
         loc='lower right')
     plt.savefig('../tmp/outliers.png') #<========================================
-
+    #plt.show()   
 
 def creating_dataset(df,column):
     '''
