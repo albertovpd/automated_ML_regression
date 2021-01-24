@@ -10,7 +10,6 @@ from datetime import datetime
 
 from my_functions import variance_threshold_selector, scientific_rounding
 
-from sklearn.covariance import EllipticEnvelope
 import matplotlib.pyplot as plt
 import matplotlib.font_manager
 
@@ -29,6 +28,8 @@ from sklearn.linear_model import Lasso
 from sklearn.metrics import mean_squared_error, explained_variance_score, max_error, mean_absolute_error,median_absolute_error, r2_score
 
 df=pd.read_csv("../tmp/dataset_final_processed.csv",index_col=[0])
+df.drop(columns=["outliers_score"],inplace=True)
+
 low_v = df.drop(columns=["date","unemployment" ])  
 X_raw= variance_threshold_selector(low_v, 5) # removing values than vary less than 5%
 
@@ -89,33 +90,6 @@ model_name=list(model_performance.values())[0][0]
 model_config=list(model_performance.values())[0][1]
 
 print("winner model: ", model_name, ",score: ",score)
-#print(model_performance)
-#regression= LinearRegression()
-# regression = Lasso(alpha=0.1,
-#                   selection="random",
-#                   max_iter=10000,
-#                   random_state=42)
-#regression= Ridge(alpha=0.1,max_iter=10000, solver='auto', random_state=42)
-
-# overfitting ñapa turbomierder XXL omg x3
-# random_number=42
-# for _ in list(range(10)):                       
-#     rfecv = RFECV(estimator=regression,
-#                 step=1, 
-#                   min_features_to_select=min_number_features, 
-#                   cv=KFold(n_splits=10,
-#                         shuffle=True,
-#                         random_state=random_number),
-#                   scoring='neg_mean_squared_error')
-                       
-#     rfecv.fit(X_train, target_train)
-#     score = rfecv.score(X_train, target_train)
-#     random_number+=1
-#     if score<0.99:
-#         break
-            
-# print("3 - Score: ",score)
-
 # Ranking of how important are the following keywords to infer in Google searches in Spain
 # the keyword "unemployment"
 ranking_features=pd.DataFrame()
@@ -163,7 +137,8 @@ metrics_cross_val_score=[
                         ]
 
 regression=model_config # the winner model before
-X_train= X_train[ranking_features[ranking_features["top_important"]==1]["features"]] #selecting the same columns than before
+#X_train= X_train[ranking_features[ranking_features["top_important"]==1]["features"]] #selecting the features scored as 1 in importance
+#X_train = X_train[list(X_train.columns)[:rfecv.n_features_]] # taking all the selected features before
 for m in metrics_cross_val_score:
     score=cross_val_score(regression, 
         X_train,
