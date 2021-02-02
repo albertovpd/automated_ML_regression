@@ -67,6 +67,8 @@ blacks = len(scores_pred)-len(scores_pred[scores_pred<threshold])
 outliers_graph(pca_data, outlier_method, blacks, threshold, plot_min, plot_max)
 #------------------------
 
+# remove outliers column:
+df.drop(columns=["outliers_score"] , inplace=True )
 
 df.to_csv("../tmp/dataset_final_processed.csv") 
 print("2: dataset without outliers sent to /tmp")

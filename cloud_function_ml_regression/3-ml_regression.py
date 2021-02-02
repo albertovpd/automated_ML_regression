@@ -28,7 +28,6 @@ from sklearn.linear_model import Lasso
 from sklearn.metrics import mean_squared_error, explained_variance_score, max_error, mean_absolute_error,median_absolute_error, r2_score
 
 df=pd.read_csv("../tmp/dataset_final_processed.csv",index_col=[0])
-df.drop(columns=["outliers_score"],inplace=True)
 
 low_v = df.drop(columns=["date","unemployment" ])  
 X_raw= variance_threshold_selector(low_v, 5) # removing values than vary less than 5%
