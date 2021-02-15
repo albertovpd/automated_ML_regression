@@ -1,6 +1,9 @@
 # i need to import libraries here to avoid conflicts
 from datetime import datetime, timedelta
 import numpy as np
+from math import sqrt
+import sklearn.metrics as metrics 
+
 #from google.cloud import storage
 
 
