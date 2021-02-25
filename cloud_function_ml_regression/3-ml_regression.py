@@ -79,10 +79,17 @@ metrics_dict= {
     "median_absolute_error": make_scorer(metrics.median_absolute_error,
             greater_is_better=False)
 }
+<<<<<<< HEAD
 
 #----------------- ML -----------------
 min_number_features =  df.shape[0]//8 # Min number of features to play with
 
+=======
+
+#----------------- ML -----------------
+min_number_features =  df.shape[0]//8 # Min number of features to play with
+
+>>>>>>> df25908adba494b4a60890544fc9c348528fce93
 # dictionary of r2 metrics: we'll use this for choosing the model
 model_performance={}
 for r in regression:
@@ -116,6 +123,7 @@ ranking_features["features"]=X_train.columns
 ranking_features["top_important"]=rfecv.ranking_
 ranking_features.sort_values(by="top_important", ascending=True, inplace=True, ignore_index=True)
 ranking_features.to_csv("../tmp/ranking_of_features.csv")  # <============================
+<<<<<<< HEAD
 
 # now I have the chosen features, let's use cross validation with that columns:
 chosen_features=list(ranking_features[ranking_features["top_important"]<=10]["features"])
@@ -130,15 +138,40 @@ results["selected_columns"]=len(X_train.columns)
 evaluation = cross_validate(model_config, X_train, target_train,
                 cv = KFold(n_splits=10), scoring = metrics_dict)
 
+=======
+#ranking_features.to_csv("gs:///ranking_of_features.csv")  # <============================ 8
+
+# now I have the chosen features, let's use cross validation with that columns:
+chosen_features=list(ranking_features[ranking_features["top_important"]<=10]["features"])
+X_train= X[chosen_features].iloc[:-4]
+X_test=X[chosen_features].iloc[-4:]
+len(X_train.columns)
+
+# results
+results["selected_columns"]=len(X_train.columns)
+
+# Validation of model with the dictionary of metrics. I'll get a measure for every validation folder.
+evaluation = cross_validate(model_config, X_train, target_train,
+                cv = KFold(n_splits=10), scoring = metrics_dict)
+
+>>>>>>> df25908adba494b4a60890544fc9c348528fce93
 # just in case
 for e in evaluation:
     evaluation[e] = evaluation[e][~np.isnan(evaluation[e])]
     evaluation[e] = evaluation[e][~np.isinf(evaluation[e])]
+<<<<<<< HEAD
 
 # populating our df of scores
 results["mae"]=round(evaluation["test_mae"].mean(),3)
 results["mae_error"]=round(evaluation["test_mae"].std(),3)
 
+=======
+
+# populating our df of scores
+results["mae"]=round(evaluation["test_mae"].mean(),3)
+results["mae_error"]=round(evaluation["test_mae"].std(),3)
+
+>>>>>>> df25908adba494b4a60890544fc9c348528fce93
 results["rmse"]=round(evaluation["test_rmse"].mean(),3)
 results["rmse_error"]=round(evaluation["test_rmse"].std(),3)
 
@@ -156,7 +189,11 @@ results["median_abs_error_eror"]=round(evaluation["test_median_absolute_error"].
 
 results_df=pd.DataFrame.from_dict(results,orient='index').T
 results_df.to_csv("../tmp/weekly_score.csv") #<============================================
+<<<<<<< HEAD
 
+=======
+#weekly_score.to_csv("gs://--yourbucket--/weekly_score.csv") #<========================= 4
+>>>>>>> df25908adba494b4a60890544fc9c348528fce93
 
 # inferences plot
 inferred_results=list(rfecv.predict(X)) # this is just to avoid generating nans in df
@@ -169,7 +206,12 @@ result["inferred_results"]=inferred_results
 result["inferred_results"]=result["inferred_results"].apply(lambda x: 0 if x<0 else round(x,2))
 if result["inferred_results"].min()==0:
     result.drop(result.tail(1).index,inplace=True) # drop last row (better visualization)
+<<<<<<< HEAD
 result.to_csv("../tmp/results-inferences-overwrite.csv") # <=============================== 5
+=======
+result.to_csv("../tmp/results-inferences-overwrite.csv")
+#result.to_csv("gs://--yourbucket--/results-inferences-overwrite.csv") # <=============================== 5
+>>>>>>> df25908adba494b4a60890544fc9c348528fce93
 
 # features performance plot
 plt.figure(figsize=(16, 9))
@@ -180,4 +222,8 @@ plt.plot(range(1, len(rfecv.grid_scores_) + 1), rfecv.grid_scores_, color='#303F
 plt.savefig("../tmp/RFE_columns.png")   # <================================== 7
 
 #
+<<<<<<< HEAD
 print("ML regression done")
+=======
+print("ML regression done")
+>>>>>>> df25908adba494b4a60890544fc9c348528fce93

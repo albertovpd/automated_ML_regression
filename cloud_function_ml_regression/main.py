@@ -2,7 +2,12 @@
 from datetime import datetime, timedelta
 import numpy as np
 from math import sqrt
+<<<<<<< HEAD
 import sklearn.metrics as metrics
+=======
+import sklearn.metrics as metrics 
+
+>>>>>>> df25908adba494b4a60890544fc9c348528fce93
 #from google.cloud import storage
 
 
