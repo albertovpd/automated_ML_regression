@@ -35,7 +35,7 @@ for c in low_v.columns:
         #print(c)
         removed.append(c)
 removed=pd.DataFrame(removed, columns =["Removed_columns"])
-    removed.to_csv("../tmp/removed_features_low_variance.csv")
+removed.to_csv("../tmp/removed_features_low_variance.csv")
 
 #-- normalization/standarization
 normalizer = preprocessing.MinMaxScaler()
@@ -44,7 +44,7 @@ X = pd.DataFrame(normalizer.fit_transform(X_raw))
 #X = pd.DataFrame(standardizer.fit_transform(X_raw))
 
 X.columns= X_raw.columns
-X.shape
+#X.shape
 target=df["unemployment"]
 # all but last 4 rows
 X_train=X.iloc[:-4]
@@ -121,14 +121,16 @@ ranking_features.to_csv("../tmp/ranking_of_features.csv")  # <==================
 chosen_features=list(ranking_features[ranking_features["top_important"]<=10]["features"])
 X_train= X[chosen_features].iloc[:-4]
 X_test=X[chosen_features].iloc[-4:]
-len(X_train.columns)
+#len(X_train.columns)
 
 # results
 results["selected_columns"]=len(X_train.columns)
 
-# Validation of model with the dictionary of metrics. I'll get a measure for every validation folder.
+#----------------------------------------------------------------
+#  Validation of model with the dictionary of metrics. I'll get a measure for every validation folder.
 evaluation = cross_validate(model_config, X_train, target_train,
                 cv = KFold(n_splits=10), scoring = metrics_dict)
+#----------------------------------------------------------------
 
 # just in case
 for e in evaluation:
