@@ -37,16 +37,6 @@ for c in low_v.columns:
 removed=pd.DataFrame(removed, columns =["Removed_columns"])
 removed.to_csv("../tmp/removed_features_low_variance.csv")
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-#-- normalization/standarization
-normalizer = preprocessing.MinMaxScaler()
-X = pd.DataFrame(normalizer.fit_transform(X_raw))
-#standardizer = preprocessing.StandardScaler()
-#X = pd.DataFrame(standardizer.fit_transform(X_raw))
-=======
->>>>>>> 351c475ca71191e92de2ea2c9780a4e6abc9cb0c
 # NORMALIZATION/STANDARIZATION
 #  => z-score works with standarization, so let's standarize 
 
@@ -54,10 +44,6 @@ X = pd.DataFrame(normalizer.fit_transform(X_raw))
 #X = pd.DataFrame(normalizer.fit_transform(X_raw))
 standardizer = preprocessing.StandardScaler()
 X = pd.DataFrame(standardizer.fit_transform(X_raw))
-<<<<<<< HEAD
-=======
->>>>>>> outliers3d
->>>>>>> 351c475ca71191e92de2ea2c9780a4e6abc9cb0c
 
 X.columns= X_raw.columns
 #X.shape
@@ -121,15 +107,7 @@ score=list(model_performance.keys())[0]
 model_name=list(model_performance.values())[0][0]
 model_config=list(model_performance.values())[0][1]
 
-<<<<<<< HEAD
 print("3: ",score, model_name)
-=======
-<<<<<<< HEAD
-print(score, model_name)
-=======
-print("3: ",score, model_name)
->>>>>>> outliers3d
->>>>>>> 351c475ca71191e92de2ea2c9780a4e6abc9cb0c
 
 # final dataframe
 results={"date":today,"model":model_name, "r2":round(score,3)}
@@ -149,7 +127,6 @@ X_test=X[chosen_features].iloc[-4:]
 
 # results
 results["selected_columns"]=len(X_train.columns)
-<<<<<<< HEAD
 
 #----------------------------------------------------------------
 #  Validation of model with the dictionary of metrics. I'll get a measure for every validation folder.
@@ -162,20 +139,6 @@ for e in evaluation:
     evaluation[e] = evaluation[e][~np.isnan(evaluation[e])]
     evaluation[e] = evaluation[e][~np.isinf(evaluation[e])]
 
-=======
-
-#----------------------------------------------------------------
-#  Validation of model with the dictionary of metrics. I'll get a measure for every validation folder.
-evaluation = cross_validate(model_config, X_train, target_train,
-                cv = KFold(n_splits=10), scoring = metrics_dict)
-#----------------------------------------------------------------
-
-# just in case
-for e in evaluation:
-    evaluation[e] = evaluation[e][~np.isnan(evaluation[e])]
-    evaluation[e] = evaluation[e][~np.isinf(evaluation[e])]
-
->>>>>>> outliers3d
 # populating our df of scores
 results["mae"]=round(evaluation["test_mae"].mean(),3)
 results["mae_error"]=round(evaluation["test_mae"].std(),3)
@@ -220,11 +183,3 @@ plt.ylabel('Inner algorithm score', fontsize=28, labelpad=20)
 plt.plot(range(1, len(rfecv.grid_scores_) + 1), rfecv.grid_scores_, color='#303F9F', linewidth=3)
 plt.savefig("../tmp/RFE_columns.png")   # <================================== 7
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-#
-print("ML regression done")
-=======
->>>>>>> outliers3d
->>>>>>> 351c475ca71191e92de2ea2c9780a4e6abc9cb0c
