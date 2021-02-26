@@ -19,6 +19,10 @@ I am inferring the **Trending Index** for *unemployment searches* in Google Spai
 This a leisure project to reinforce knowledge about Machine Learning, automation and display in Google Cloud Platform. 
 It is going to be upgraded veeery slowly, if you don't find something that catches your eye in the dashboard, check other branches out.
 
+- Logs preview of the 2nd Cloud Function :D 
+![alt](/output/cloud_function_logs.png)
+
+
 ### What is the Trending Index? How am I feeding my model?
 
 <details>
@@ -131,12 +135,28 @@ Extras, configuration:
 <details>
   <summary>Click to expand</summary>
 
+Currently, this is the process:
+
+1-creating_dataset.py:
+  - Merge 4 datasets of different lenghts, group by week.
+
+2-processing_dataset.py:
+  - Slide the *date* column, to associate data to dates 4 weeks ahead. It's a way to build the X set from which I'll infer the target *"in the future"*.
+  - Remove outliers with z-score.
+  - 2D and 3D representation of outliers.
+
+3-ml_regression:
+  - Remove features with low variance.
+  - Standarize results (following the z-score logic).
+  - Use the r² coefficient to determine the best regression model.
+  - With the selected model and a dictionary of metrics, it uses a dictionary to get metrics and their associated standard deviation (cross regarding the validation buckets).
+  - Plot performance vs number of features.
+
+4-sending_pics_to_storage.py:
+  - Send objects to Cloud Storage (copypasted from Googel documentation).
+
+
 Here **https://github.com/albertovpd/automated_ML_regression/tree/master/cloud_function_ml_regression** you will find the Cloud Function script.
-
-
-The processing part of the ML Cloud Function has changed with time. At the moment, the most updated jupyter is this one => **https://github.com/albertovpd/automated_ML_regression/blob/master/testing_ml.ipynb**
-
-This explains the processing of data before ML => https://github.com/albertovpd/automated_ML_regression/blob/master/testing_processing.ipynb
 
 
 </details>
@@ -150,11 +170,10 @@ This explains the processing of data before ML => https://github.com/albertovpd/
 
 The goal was to automate a ML model within a Cloud Function and infer data from a previous ETL. A Cloud Function has 4GB of RAM and 60 seconds of timeout, I felt it like a challenge. 
 
-This project has room for improvement, quite a lot. Myself from the future will work refactoring the code, performing a better feature selection and optimizing everything... Or not, in the end this is a leisure project and the goal is learning. I know now how to do it an also, how to do it way better. Goal accomplished.
+This project has room for improvement, quite a lot. Myself from the future will work refactoring the code, performing a better feature selection and optimizing everything... Or not, in the end this is a leisure project and the goal is learning. Goal accomplished.
 
-Finally, it delivers coherent results according to the nature of my entry data, I'm happy for that, nevertheless the associated uncertainty of every metric tends to be really big.
-
-In Physics (long story short), an acceptable error is 3 orders of magnitude lower than the measurement. I think I won't be able to reach that level with this project, but anyway,associated uncertainties must be shown, period.
+Finally, it delivers coherent results according to the nature of my entry data, I'm happy for that, nevertheless the associated uncertainty of every metric is not valid: 
+In Physics (long story short), an acceptable error is 3 orders of magnitude lower than the measurement. I think I won't be able to reach that level, but anyway,associated uncertainties must be shown, period.
 
 
 </details>

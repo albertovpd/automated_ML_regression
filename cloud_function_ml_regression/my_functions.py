@@ -3,8 +3,66 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 import matplotlib.font_manager
+from mpl_toolkits.mplot3d import Axes3D
 
 from sklearn.feature_selection import VarianceThreshold
+from sklearn import decomposition 
+
+#from google.cloud import storage
+
+
+def plot_dimensions(df_outliers,df_date,dates):
+    '''
+    This is a terrible function, don't kill me. Fast and furious mode.
+    '''
+    #2D
+    pca=decomposition.PCA()
+    pca.n_components=2
+    pca_data=pca.fit_transform(df_outliers)
+    pca_data=pd.DataFrame(pca_data)
+    pca_data.rename(columns={0:"a",1:"b"}, inplace=True)
+
+    pca_data["date"]=df_date
+    pca_data["outliers"]=[0 if d in list(dates) else 1 for d in list(pca_data.date)]
+
+    red= pca_data[pca_data["outliers"]==1][["a","b"]]
+    blue= pca_data[pca_data["outliers"]==0][["a","b"]]
+
+    fig = plt.figure(figsize=[15,15])
+    ax = fig.add_subplot(111)
+    ax.scatter(red.a, red.b, marker="v", color="r") # "P"
+    ax.scatter( blue.a,blue.b, marker="^", color="b") # "P"
+    ax.grid(True)
+    plt.xlabel('Dimension a')
+    plt.ylabel('Dimension b')
+
+    plt.title('PCA of 125 columns to dashboard detected outliers')
+    plt.savefig("../tmp/outliers_2d.png")
+
+    #3D, the very same, don't kill me
+    pca=decomposition.PCA()
+    pca.n_components=3
+    pca_data=pca.fit_transform(df_outliers)
+    pca_data=pd.DataFrame(pca_data)
+    pca_data.rename(columns={0:"a",1:"b",2:"c"}, inplace=True)
+
+    pca_data["date"]=df_date
+    pca_data["outliers"]=[0 if d in list(dates) else 1 for d in list(pca_data.date)]
+
+    red= pca_data[pca_data["outliers"]==1][["a","b","c"]]
+    blue= pca_data[pca_data["outliers"]==0][["a","b","c"]]
+
+    fig = plt.figure(figsize=[15,15])
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(red.c,red.a, red.b, marker="v", color="r") # "P"
+    ax.scatter( blue.c,blue.a,blue.b, marker="^", color="b") # "P"
+    ax.grid(True)
+    plt.xlabel('Dimension a')
+    plt.ylabel('Dimension b')
+
+    plt.title('PCA of 125 columns to dashboard detected outliers')
+    plt.savefig("../tmp/outliers_3d.png")
+    
 
 def scientific_rounding(value):
     error=str(value[1]).split(".")
@@ -58,6 +116,7 @@ def outliers_graph(df, outlier_method, outliers_begin, threshold, xmin, xmax):
         loc='lower right')
     plt.savefig('../tmp/outliers.png') #<========================================
     #plt.show()   
+
 
 def creating_dataset(df,column):
     '''

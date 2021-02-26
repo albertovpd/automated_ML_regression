@@ -14,12 +14,11 @@ def upload_blob(source_file_name, destination_blob_name):
     blob.upload_from_filename(source_file_name)
 
     print(
-        "File {} uploaded to {}.".format(
+        "4 - GCPics -File {} uploaded to {}.".format(
             source_file_name, destination_blob_name
         )
     )
 
-#print("UPLOADING PICS")
 upload_blob("../tmp/RFE_columns.png","RFE_columns.png")
-upload_blob("../tmp/outliers.png","outliers.png")
-#print("PICS SENT")
+upload_blob("../tmp/outliers_2d.png","outliers_2d.png")
+upload_blob("../tmp/outliers_3d.png","outliers_23.png")
