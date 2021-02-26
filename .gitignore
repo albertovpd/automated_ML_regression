@@ -10,7 +10,7 @@ __pycache__/
 debug.ipynb
 cf_ml_test/
 
-# folders
+# folders and jupyters
 input/
 study/
 tmp/
@@ -18,6 +18,8 @@ gcp_place.py
 .env 
 .ipynb_checkpoints
 __pycache__
+cloud_function_ml_regression/__pycache__
+*.ipynb
 
 # Distribution / packaging
 .Python
