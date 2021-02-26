@@ -9,7 +9,7 @@ load_dotenv()
 # working remote => in .env, save the path without "", like:    df_google   =   ./folder/whatever
 # working on the cloud => the key of your token is the bucket:  df_google   =   gs://<yourbucket>/<yourcsv>)
 
-df_google= pd.read_csv("../tmp/data_pytrends.csv")
+df_google= pd.read_csv("../tmp/data_pytrends.csv") # <=====================
 df_google.sort_values(by=["date"],inplace=True)
 print("1: google dataset loaded")
 
