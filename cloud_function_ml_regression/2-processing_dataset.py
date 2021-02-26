@@ -63,10 +63,11 @@ df_date["date"]=df.date
 dataset=df_without_outliers.merge(df_date,how='left', left_index=True, right_index=True)
 dataset.to_csv("../tmp/dataset_final_processed.csv")
 
+#print(dataset.date)
+# DASHBOARDING OUTLIERS => needs refactorization
+plot_dimensions(df_outliers,df_date,dataset.date)
 
-# DASHBOARDING OUTLIERS
-plot_dimensions(df_outliers,df_date,dataset.date,2,"outliers_2d")
-plot_dimensions(df_outliers,df_date,dataset.date,3,"outliers_3d")
+#pca_data.shape
 print("2: plots sent to tmp folder")
 
 print("2: dataset without outliers sent to /tmp")

@@ -11,46 +11,58 @@ from sklearn import decomposition
 #from google.cloud import storage
 
 
-def plot_dimensions(df_outliers,df_date,dates,d,saving_title):
+def plot_dimensions(df_outliers,df_date,dates):
     '''
-    It performs a PCA reducing dimensions to 2 or 3.
-    Hardly usable for other projects.
-    - d == dimension
+    This is a terrible function, don't kill me. Fast and furious mode.
     '''
+    #2D
     pca=decomposition.PCA()
-    pca.n_components=d
+    pca.n_components=2
     pca_data=pca.fit_transform(df_outliers)
     pca_data=pd.DataFrame(pca_data)
-    
+    pca_data.rename(columns={0:"a",1:"b"}, inplace=True)
+
     pca_data["date"]=df_date
-    pca_data["outliers"]=[0 if d in dates else 1 for d in pca_data.date]
-    
-    fig = plt.figure(figsize=[15,15]) # to plot
-    
-    if d==3:
-        pca_data.rename(columns={0:"a",1:"b",2:"c"}, inplace=True)
-        red= pca_data[pca_data["outliers"]==1][["a","b","c"]]
-        blue= pca_data[pca_data["outliers"]==0][["a","b","c"]]
-        ax = fig.add_subplot(111, projection='3d') # plotting 3d
-        ax.scatter(red.c,red.a, red.b, marker="v", color="r") 
-        ax.scatter( blue.c,blue.a,blue.b, marker="^", color="b") 
-        
-    else:
-        pca_data.rename(columns={0:"a",1:"b"}, inplace=True)
-        red= pca_data[pca_data["outliers"]==1][["a","b"]]
-        blue= pca_data[pca_data["outliers"]==0][["a","b"]]
-        ax = fig.add_subplot(111)
-        ax.scatter(red.a, red.b, marker="v", color="r") # "P"
-        ax.scatter( blue.a,blue.b, marker="^", color="b") # "P"
-    
+    pca_data["outliers"]=[0 if d in list(dates) else 1 for d in list(pca_data.date)]
+
+    red= pca_data[pca_data["outliers"]==1][["a","b"]]
+    blue= pca_data[pca_data["outliers"]==0][["a","b"]]
+
+    fig = plt.figure(figsize=[15,15])
+    ax = fig.add_subplot(111)
+    ax.scatter(red.a, red.b, marker="v", color="r") # "P"
+    ax.scatter( blue.a,blue.b, marker="^", color="b") # "P"
+    ax.grid(True)
     plt.xlabel('Dimension a')
     plt.ylabel('Dimension b')
 
-    plt.title('PCA of 120 columns to dashboard detected outliers')
-    plt.savefig("../tmp/{}.png".format(saving_title))  
+    plt.title('PCA of 125 columns to dashboard detected outliers')
+    plt.savefig("../tmp/outliers_2d.png")
 
-    #plt.show()
+    #3D, the very same, don't kill me
+    pca=decomposition.PCA()
+    pca.n_components=3
+    pca_data=pca.fit_transform(df_outliers)
+    pca_data=pd.DataFrame(pca_data)
+    pca_data.rename(columns={0:"a",1:"b",2:"c"}, inplace=True)
 
+    pca_data["date"]=df_date
+    pca_data["outliers"]=[0 if d in list(dates) else 1 for d in list(pca_data.date)]
+
+    red= pca_data[pca_data["outliers"]==1][["a","b","c"]]
+    blue= pca_data[pca_data["outliers"]==0][["a","b","c"]]
+
+    fig = plt.figure(figsize=[15,15])
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(red.c,red.a, red.b, marker="v", color="r") # "P"
+    ax.scatter( blue.c,blue.a,blue.b, marker="^", color="b") # "P"
+    ax.grid(True)
+    plt.xlabel('Dimension a')
+    plt.ylabel('Dimension b')
+
+    plt.title('PCA of 125 columns to dashboard detected outliers')
+    plt.savefig("../tmp/outliers_3d.png")
+    
 
 def scientific_rounding(value):
     error=str(value[1]).split(".")
