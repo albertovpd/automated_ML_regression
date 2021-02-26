@@ -37,11 +37,13 @@ for c in low_v.columns:
 removed=pd.DataFrame(removed, columns =["Removed_columns"])
 removed.to_csv("../tmp/removed_features_low_variance.csv")
 
-#-- normalization/standarization
-normalizer = preprocessing.MinMaxScaler()
-X = pd.DataFrame(normalizer.fit_transform(X_raw))
-#standardizer = preprocessing.StandardScaler()
-#X = pd.DataFrame(standardizer.fit_transform(X_raw))
+# NORMALIZATION/STANDARIZATION
+#  => z-score works with standarization, so let's standarize 
+
+#normalizer = preprocessing.MinMaxScaler()
+#X = pd.DataFrame(normalizer.fit_transform(X_raw))
+standardizer = preprocessing.StandardScaler()
+X = pd.DataFrame(standardizer.fit_transform(X_raw))
 
 X.columns= X_raw.columns
 #X.shape
@@ -105,7 +107,7 @@ score=list(model_performance.keys())[0]
 model_name=list(model_performance.values())[0][0]
 model_config=list(model_performance.values())[0][1]
 
-print(score, model_name)
+print("3: ",score, model_name)
 
 # final dataframe
 results={"date":today,"model":model_name, "r2":round(score,3)}
@@ -174,12 +176,10 @@ if result["inferred_results"].min()==0:
 result.to_csv("../tmp/results-inferences-overwrite.csv") # <=============================== 5
 
 # features performance plot
-plt.figure(figsize=(16, 9))
+plt.figure(figsize=(18, 10))
 plt.title('Recursive Feature Elimination with Cross-Validation', fontsize=34, pad=20)
 plt.xlabel('Number of features selected', fontsize=28, labelpad=20)
 plt.ylabel('Inner algorithm score', fontsize=28, labelpad=20)
 plt.plot(range(1, len(rfecv.grid_scores_) + 1), rfecv.grid_scores_, color='#303F9F', linewidth=3)
 plt.savefig("../tmp/RFE_columns.png")   # <================================== 7
 
-#
-print("ML regression done")
