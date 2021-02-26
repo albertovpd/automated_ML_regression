@@ -1,31 +1,22 @@
 import pandas as pd
 import numpy as np
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, date
 
 from sklearn import preprocessing
 from sklearn import decomposition 
 from scipy import stats
-from sklearn.covariance import EllipticEnvelope
+#from sklearn.covariance import EllipticEnvelope
 
 import matplotlib.pyplot as plt
-import matplotlib.font_manager
-from my_functions import outliers_graph
+from mpl_toolkits.mplot3d import Axes3D
+#import matplotlib.font_manager
+from my_functions import plot_dimensions   #outliers_graph
 
 
 dataset=pd.read_csv("../tmp/dataset_final.csv",index_col=[0])
 
-# # outliers removal
-# without_date= list(dataset.columns)
-# without_date.remove("date")
-# for c in without_date:
-#     q_low= dataset[c].quantile(0.05)
-#     q_high= dataset[c].quantile(0.95)
-#     df= dataset[(dataset[c]<q_high) & (dataset[c]> q_low)]
-# removed=int(100*(dataset.shape[0]-df.shape[0])/df.shape[0])
-
-
-
-# sliding time moving everything 4 weeks ahead, to have an "x axis" from which infer my target
+# SLIDING
+# moving everything 4 weeks ahead, to have an "x axis" from which infer my target
 dataset["date"]=pd.to_datetime(dataset["date"])
 df_unemployment=pd.DataFrame(dataset[["date", "unemployment"]])
 dataset.drop(columns="unemployment", inplace=True)
@@ -41,35 +32,43 @@ df.reset_index(drop=True,inplace=True)
 df.drop([0,1,2,3], inplace=True)
 df.reset_index(drop=True, inplace=True) # very important
 
-outliers_dect= df.drop(columns=["date","unemployment"])
-# 2D reduction
-pca=decomposition.PCA()
-pca.n_components=2
-pca_data=pca.fit_transform(outliers_dect)
-pca_data=pd.DataFrame(pca_data)
-pca_data.rename(columns={0:"a",1:"b"}, inplace=True)
 
-# outliers detection.
-outlier_method = EllipticEnvelope().fit(pca_data)
-scores_pred = outlier_method.decision_function(pca_data)
-threshold = stats.scoreatpercentile(scores_pred, 20) # remove just the heaviest outliers
+# REMOVING OUTLIERS
+column_list=list(df.columns)
+column_list.remove("date") # it is no sense processing this column
 
-# outliers removal
-df["outliers_score"]=scores_pred
-df =df[df["outliers_score"]>=threshold]
-print("-2- df processed without outliers shape: ",df.shape)
+# using zscore for each column
+df_outliers=df[column_list]
+z_scores = stats.zscore(df_outliers)
+abs_z_scores = np.abs(z_scores)
 
-# Plot outliers.
-plot_min=int(min(list(pca_data.min())))
-plot_max=int(max(list(pca_data.max())))
-blacks = len(scores_pred)-len(scores_pred[scores_pred<threshold])
+# we should really work with zscore <= +-3 to stick to the math, but i'll loose a lot of data
+filtered_entries = (abs_z_scores < 6).all(axis=1)
+df_without_outliers = df_outliers[filtered_entries]
+percentaje = round( 100*(1 - df_without_outliers.shape[0]/df_outliers.shape[0]))
+print("2: {} % of rows removed".format(percentaje))
 
-outliers_graph(pca_data, outlier_method, blacks, threshold, plot_min, plot_max)
-#------------------------
+# for dashboarding the weekly removed percentaje
+# google trends data varies a lot every week, so maybe it is worth check it out
+today=datetime.now().date()
+cleaning_results= pd.DataFrame({"date":[today], "percentaje_removed":[percentaje]})
+cleaning_results.to_csv("../tmp/cleaning_results.csv")   # <=========================================
 
-# remove outliers column:
-df.drop(columns=["outliers_score"] , inplace=True )
+# ------------------
+# clean dataset for ML
+df_date=pd.DataFrame() 
+df_date["date"]=df.date
 
-df.to_csv("../tmp/dataset_final_processed.csv") 
+# now we add it by the index
+dataset=df_without_outliers.merge(df_date,how='left', left_index=True, right_index=True)
+dataset.to_csv("../tmp/dataset_final_processed.csv")
+
+#print(dataset.date)
+# DASHBOARDING OUTLIERS => needs refactorization
+plot_dimensions(df_outliers,df_date,dataset.date)
+
+#pca_data.shape
+print("2: plots sent to tmp folder")
+
 print("2: dataset without outliers sent to /tmp")
 
