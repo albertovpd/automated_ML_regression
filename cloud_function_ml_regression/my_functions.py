@@ -3,8 +3,54 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 import matplotlib.font_manager
+from mpl_toolkits.mplot3d import Axes3D
 
 from sklearn.feature_selection import VarianceThreshold
+from sklearn import decomposition 
+
+#from google.cloud import storage
+
+
+def plot_dimensions(df_outliers,df_date,dates,d,saving_title):
+    '''
+    It performs a PCA reducing dimensions to 2 or 3.
+    Hardly usable for other projects.
+    - d == dimension
+    '''
+    pca=decomposition.PCA()
+    pca.n_components=d
+    pca_data=pca.fit_transform(df_outliers)
+    pca_data=pd.DataFrame(pca_data)
+    
+    pca_data["date"]=df_date
+    pca_data["outliers"]=[0 if d in dates else 1 for d in pca_data.date]
+    
+    fig = plt.figure(figsize=[15,15]) # to plot
+    
+    if d==3:
+        pca_data.rename(columns={0:"a",1:"b",2:"c"}, inplace=True)
+        red= pca_data[pca_data["outliers"]==1][["a","b","c"]]
+        blue= pca_data[pca_data["outliers"]==0][["a","b","c"]]
+        ax = fig.add_subplot(111, projection='3d') # plotting 3d
+        ax.scatter(red.c,red.a, red.b, marker="v", color="r") 
+        ax.scatter( blue.c,blue.a,blue.b, marker="^", color="b") 
+        
+    else:
+        pca_data.rename(columns={0:"a",1:"b"}, inplace=True)
+        red= pca_data[pca_data["outliers"]==1][["a","b"]]
+        blue= pca_data[pca_data["outliers"]==0][["a","b"]]
+        ax = fig.add_subplot(111)
+        ax.scatter(red.a, red.b, marker="v", color="r") # "P"
+        ax.scatter( blue.a,blue.b, marker="^", color="b") # "P"
+    
+    plt.xlabel('Dimension a')
+    plt.ylabel('Dimension b')
+
+    plt.title('PCA of 120 columns to dashboard detected outliers')
+    plt.savefig("../tmp/{}.png".format(saving_title))  
+
+    #plt.show()
+
 
 def scientific_rounding(value):
     error=str(value[1]).split(".")
@@ -58,6 +104,7 @@ def outliers_graph(df, outlier_method, outliers_begin, threshold, xmin, xmax):
         loc='lower right')
     plt.savefig('../tmp/outliers.png') #<========================================
     #plt.show()   
+
 
 def creating_dataset(df,column):
     '''
