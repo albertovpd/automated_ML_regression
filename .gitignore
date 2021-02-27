@@ -20,6 +20,7 @@ gcp_place.py
 __pycache__
 cloud_function_ml_regression/__pycache__
 *.ipynb
+jupyters/
 
 # Distribution / packaging
 .Python
