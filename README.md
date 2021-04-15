@@ -16,11 +16,17 @@
 
 I am inferring the **Trending Index** for *unemployment searches* in Google Spain.
 
-This a leisure project to reinforce knowledge about Machine Learning, automation and display in Google Cloud Platform. 
-It is going to be upgraded veeery slowly, if you don't find something that catches your eye in the dashboard, check other branches out.
+This a leisure project to reinforce knowledge about:
+- Machine Learning.
+- Orchestrating a project.
+- ETL automations in Google Cloud Platform.
 
-- Logs preview of the 2nd Cloud Function :D 
-![alt](/output/cloud_function_logs.png)
+Achievements:
+- A humble but fail-safe ETL built in GCP.
+- Many ML researches and data processing. 
+- Final tables linked to a Data Studio dashboard.
+- Continuous upgrades implemented in different branches, erased when merged to master. => https://github.com/albertovpd/automated_ML_regression/network
+
 
 
 ### What is the Trending Index? How am I feeding my model?
@@ -71,6 +77,8 @@ The pipeline consists of:
 
 <details>
   <summary>Click to expand</summary>
+
+![alt](output/cloud_function_logs.png)
 
 The processes involved are shown in *Introduction*. 
 
@@ -156,7 +164,7 @@ Currently, this is the process:
   - Send objects to Cloud Storage (copypasted from Googel documentation).
 
 
-Here **https://github.com/albertovpd/automated_ML_regression/tree/master/cloud_function_ml_regression** you will find the Cloud Function script.
+Some day I'll upload the ultimate Jupyter. It is just it was non sense having it open to the public and obsolete. In the end, the story is told in the **cloud_function_ml_regression** script.
 
 
 </details>
