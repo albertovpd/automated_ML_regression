@@ -164,7 +164,7 @@ Currently, this is the process:
   - Send objects to Cloud Storage (copypasted from Googel documentation).
 
 
-Some day I'll upload the ultimate Jupyter. It is just it was non sense having it open to the public and obsolete. In the end, the story is told in the **cloud_function_ml_regression** script.
+A Jupyter notebook of the processing part can be found here. The ML part is explained better in the cloud_function folder => https://github.com/albertovpd/viu-ai_master/blob/main/assessments/c1-data_cleaning-act_final.ipynb 
 
 
 </details>
