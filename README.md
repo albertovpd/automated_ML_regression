@@ -27,6 +27,8 @@ Achievements:
 - Final tables linked to a Data Studio dashboard.
 - Continuous upgrades implemented in different branches, erased when merged to master. => https://github.com/albertovpd/automated_ML_regression/network
 
+**Disclaimer:** According to the nature of requests with *Google Trends*, the model is trained every week. To check out a project with a trained ML model served within a Flask API, here there is a link => https://github.com/albertovpd/ata_inferences
+
 
 
 ### What is the Trending Index? How am I feeding my model?
