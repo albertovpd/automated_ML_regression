@@ -27,8 +27,11 @@ Achievements:
 - Final tables linked to a Data Studio dashboard.
 - Continuous upgrades implemented in different branches, erased when merged to master. => https://github.com/albertovpd/automated_ML_regression/network
 
-**Disclaimer:** According to the nature of requests with *Google Trends*, the model is trained every week. To check out a project with a trained ML model served within a Flask API, here there is a link => https://github.com/albertovpd/ata_inferences
+**Disclaimer 1:** According to the nature of requests with *Google Trends*, the model is trained every week. To check out a project with a trained ML model served within a Flask API, here there is a link => https://github.com/albertovpd/ata_inferences
 
+**Disclaimer 2:** Typical time series problems should be addressed differently. I am using basic linear reg models because:
+  - 1: This was just a fun learning project. 
+  - 2: Google Trends delivers already processed data over the requested period of time. Thanks to that it is easier to infer the curve of keywords over time, but the model is not usable for further requests. 
 
 
 ### What is the Trending Index? How am I feeding my model?
